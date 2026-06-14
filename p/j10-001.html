@@ -1,32 +1,93 @@
 <!doctype html>
 <html lang="zh-Hans">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>一元一次方程式｜第1次练习</title>
-<style>
-*{box-sizing:border-box}
-body{margin:0;font-family:"Microsoft YaHei",Arial,sans-serif;background:linear-gradient(145deg,#e8f3ff,#f5f9ff 48%,#eaf7f2);color:#10212f;min-height:100vh}
-.wrap{max-width:720px;margin:0 auto;padding:16px}
-.card{background:rgba(255,255,255,.96);border-radius:18px;padding:18px;box-shadow:0 14px 30px rgba(35,86,120,.14);border:1px solid rgba(255,255,255,.8);margin-bottom:14px}
-h1{font-size:24px;margin:8px 0;text-align:center;color:#0d4f72}
-.sub{width:max-content;max-width:100%;margin:10px auto 14px;padding:7px 14px;border-radius:999px;text-align:center;background:#e8f4ff;color:#17627f;font-size:14px;font-weight:700}
-label{display:block;margin:10px 0 6px;font-weight:700}
-input{width:100%;padding:13px 14px;border:1.5px solid #d7e8f4;border-radius:16px;font-size:16px;outline:none;background:#fff}
-input:focus{border-color:#2c7da0;box-shadow:0 0 0 4px rgba(44,125,160,.12)}
-button{width:100%;padding:14px;border:0;border-radius:18px;background:linear-gradient(105deg,#1e88c8,#0d5f83);color:#fff;font-size:17px;font-weight:800;margin-top:14px;cursor:pointer;box-shadow:0 8px 16px rgba(13,95,131,.22)}
-button:disabled{background:linear-gradient(105deg,#b8c9d5,#93a7b4);box-shadow:none;cursor:not-allowed}
-.q{font-size:20px;font-weight:800;margin:12px 0}
-.option{display:block;width:100%;text-align:left;background:#f8fcff;color:#12384d;border:2px solid #d9eaf5;border-radius:16px;margin:10px 0;font-weight:700;box-shadow:0 2px 6px rgba(35,86,120,.05)}
-.option.selected{background:#d9ecff;border-color:#1e88c8}
-.option.correct{background:#d9f5e0;border-color:#2e7d32}
-.option.wrong{background:#ffe0e0;border-color:#c62828}
-.explain{margin-top:14px;padding:13px;border-radius:16px;background:#fff9e8;border:1px solid #ffe0a3;line-height:1.6}
-.hidden{display:none}
-.result{font-size:20px;font-weight:800}
-.small{color:#5d6b75;font-size:14px;line-height:1.5}
-.ok{color:#2e7d32;font-weight:800}.warn{color:#c62828;font-weight:800}
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>一元一次方程式｜线上练习卷</title>
+  <style>
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:"Microsoft YaHei",Arial,sans-serif;
+      background:linear-gradient(145deg,#e8f3ff 0%,#f5f9ff 48%,#eaf7f2 100%);
+      color:#10212f;
+      min-height:100vh;
+    }
+    .wrap{max-width:720px;margin:0 auto;padding:16px}
+    .card{
+      background:rgba(255,255,255,.96);
+      border-radius:18px;
+      padding:18px;
+      box-shadow:0 14px 30px rgba(35,86,120,.14);
+      border:1px solid rgba(255,255,255,.8);
+      margin-bottom:14px;
+    }
+    h1{
+      font-size:24px;
+      margin:8px 0;
+      text-align:center;
+      color:#0d4f72;
+    }
+    .sub{
+      width:max-content;
+      max-width:100%;
+      margin:10px auto 14px;
+      padding:7px 14px;
+      border-radius:999px;
+      text-align:center;
+      background:#e8f4ff;
+      color:#17627f;
+      font-size:14px;
+      font-weight:700;
+    }
+    label{display:block;margin:10px 0 6px;font-weight:700}
+    input,select{
+      width:100%;
+      padding:13px 14px;
+      border:1.5px solid #d7e8f4;
+      border-radius:16px;
+      font-size:16px;
+      outline:none;
+      background:#fff;
+    }
+    input:focus,select:focus{border-color:#2c7da0;box-shadow:0 0 0 4px rgba(44,125,160,.12)}
+    button{
+      width:100%;
+      padding:14px;
+      border:0;
+      border-radius:18px;
+      background:linear-gradient(105deg,#1e88c8,#0d5f83);
+      color:#fff;
+      font-size:17px;
+      font-weight:800;
+      margin-top:14px;
+      cursor:pointer;
+      box-shadow:0 8px 16px rgba(13,95,131,.22);
+    }
+    button:disabled{background:linear-gradient(105deg,#b8c9d5,#93a7b4);box-shadow:none;cursor:not-allowed}
+    .q{font-size:20px;font-weight:800;margin:12px 0}
+    .option{
+      display:block;
+      width:100%;
+      text-align:left;
+      background:#f8fcff;
+      color:#12384d;
+      border:2px solid #d9eaf5;
+      border-radius:16px;
+      margin:10px 0;
+      font-weight:700;
+      box-shadow:0 2px 6px rgba(35,86,120,.05);
+    }
+    .option.selected{background:#d9ecff;border-color:#1e88c8}
+    .option.correct{background:#d9f5e0;border-color:#2e7d32}
+    .option.wrong{background:#ffe0e0;border-color:#c62828}
+    .explain{margin-top:14px;padding:13px;border-radius:16px;background:#fff9e8;border:1px solid #ffe0a3;line-height:1.6}
+    .hidden{display:none}
+    .result{font-size:20px;font-weight:800}
+    .small{color:#5d6b75;font-size:14px;line-height:1.5}
+    .ok{color:#2e7d32;font-weight:800}
+    .warn{color:#c62828;font-weight:800}
+  </style>
 </head>
 <body>
 <div class="wrap">
@@ -43,6 +104,9 @@ button:disabled{background:linear-gradient(105deg,#b8c9d5,#93a7b4);box-shadow:no
 
     <label>姓名</label>
     <input id="studentName" placeholder="请输入姓名">
+
+    <label>座号（可选）</label>
+    <input id="seatNo" inputmode="numeric" placeholder="如老师有要求，请填写座号">
 
     <button onclick="startPractice()">开始练习</button>
     <p class="small">每题作答后会立即显示解析，最后会提交学习数据给老师。</p>
@@ -62,156 +126,216 @@ button:disabled{background:linear-gradient(105deg,#b8c9d5,#93a7b4);box-shadow:no
     <p class="result" id="scoreText"></p>
     <div id="summaryBox" class="explain"></div>
     <p id="submitStatus">正在提交学习数据...</p>
+    <p class="small">若提交失败，请截图此页给老师。</p>
   </div>
 </div>
 
 <script>
-const APPS_SCRIPT_URL="https://script.google.com/macros/s/AKfycbxftIDXQRZcwvFSznSsMA60JBeiEzlmGfmPzvJdS_Np6d7_QcsfBOQ500tZTKQU-YG1/exec";
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxftIDXQRZcwvFSznSsMA60JBeiEzlmGfmPzvJdS_Np6d7_QcsfBOQ500tZTKQU-YG1/exec";
 
-const quizMeta={
-  school_id:"kchc",
-  school_name:"宽柔中学古来分校",
-  teacher_id:"lan-zhidong-001",
-  teacher_name:"蓝志东老师",
-  practice_id:"J10-001",
-  practice_name:"第1次练习",
-  practice_round:1,
-  quiz_id:"2026-S1-C01-Q001",
-  academic_year:"2026",
-  semester:"上学期",
-  class_id:"2026-S1-C01",
-  class_name:"",
-  chapter_name:"一元一次方程式",
-  quiz_name:"第1次练习"
+const quizMeta = {
+  school_id: "kchc",
+  school_name: "宽柔中学古来分校",
+  teacher_id: "lan-zhidong-001",
+  teacher_name: "蓝志东老师",
+  practice_id: "J10-001",
+  practice_name: "第1次练习",
+  practice_round: 1,
+  quiz_id: "2026-S1-C01-Q001",
+  academic_year: "2026",
+  semester: "上学期",
+  class_id: "2026-S1-C01",
+  class_name: "初一A班",
+  chapter_name: "一元一次方程式",
+  quiz_name: "第1次练习"
 };
 
-const questions=[
-{id:"Q1",text:"下列哪一个是一元一次方程式？",options:{A:"3x + 5 = 14",B:"x² + 2x = 8",C:"x + y = 6",D:"3x - 2"},answer:"A",knowledge:"定义判断",explanation:"一元一次方程式必须同时满足：有等号、只含一个未知数、未知数最高次数是1。A 符合。"},
-{id:"Q2",text:"解方程 3x + 5 = 14，x 的值是？",options:{A:"2",B:"3",C:"4",D:"5"},answer:"B",knowledge:"移项",explanation:"3x + 5 = 14，移项得 3x = 14 - 5 = 9，所以 x = 3。"},
-{id:"Q3",text:"解方程 2(x + 3) = 14，x 的值是？",options:{A:"4",B:"5",C:"6",D:"7"},answer:"A",knowledge:"去括号",explanation:"2(x + 3)=14，去括号得 2x + 6 = 14，移项得 2x = 8，所以 x = 4。"}
+const questions = [
+  {
+    id:"Q1",
+    text:"下列哪一个是一元一次方程式？",
+    options:{A:"3x + 5 = 14",B:"x² + 2x = 8",C:"x + y = 6",D:"3x - 2"},
+    answer:"A",
+    knowledge:"定义判断",
+    explanation:"一元一次方程式必须同时满足三个条件：有等号、只含一个未知数、未知数最高次数是1。A 符合；B 有 x²，不是一次；C 有 x 和 y 两个未知数；D 没有等号。"
+  },
+  {
+    id:"Q2",
+    text:"解方程 3x + 5 = 14，x 的值是？",
+    options:{A:"2",B:"3",C:"4",D:"5"},
+    answer:"B",
+    knowledge:"移项",
+    explanation:"3x + 5 = 14，先把 +5 移到右边变成 -5，所以 3x = 14 - 5 = 9，再两边除以 3，得到 x = 3。"
+  },
+  {
+    id:"Q3",
+    text:"解方程 2(x + 3) = 14，x 的值是？",
+    options:{A:"4",B:"5",C:"6",D:"7"},
+    answer:"A",
+    knowledge:"去括号",
+    explanation:"2(x + 3) = 14，先去括号得到 2x + 6 = 14。移项得 2x = 8，所以 x = 4。"
+  }
 ];
 
-let current=0,answers={},correctMap={},startTime=0,selected="";
+let current = 0;
+let answers = {};
+let correctMap = {};
+let startTime = 0;
+let selected = "";
+
 function $(id){return document.getElementById(id)}
 
 function startPractice(){
- const className=$("className").value.trim();
- const studentNo=$("studentNo").value.trim();
- const studentName=$("studentName").value.trim();
- if(!className||!studentNo||!studentName){alert("请填写班级、学号和姓名");return}
- if(!/^\d+$/.test(studentNo)){alert("学号请只填写数字");return}
- startTime=Date.now();
- $("home").classList.add("hidden");
- $("practice").classList.remove("hidden");
- renderQuestion();
+  const studentNo = $("studentNo").value.trim();
+  const studentName = $("studentName").value.trim();
+  const className = $("className").value.trim();
+  if(!className || !studentNo || !studentName){alert("请填写班级、学号和姓名");return}
+  if(!/^\d+$/.test(studentNo)){alert("学号请只填写数字");return}
+  startTime = Date.now();
+  $("home").classList.add("hidden");
+  $("practice").classList.remove("hidden");
+  renderQuestion();
 }
 
 function renderQuestion(){
- selected="";
- $("nextBtn").disabled=true;
- $("explanationBox").classList.add("hidden");
- $("explanationBox").innerHTML="";
- const q=questions[current];
- $("progress").textContent=`第 ${current+1} / ${questions.length} 题`;
- $("questionText").textContent=q.text;
- const box=$("options");
- box.innerHTML="";
- ["A","B","C","D"].forEach(letter=>{
-  const btn=document.createElement("button");
-  btn.className="option";
-  btn.textContent=`${letter}. ${q.options[letter]}`;
-  btn.onclick=()=>{
-   if(selected)return;
-   selected=letter;
-   const ok=selected===q.answer;
-   answers[q.id]=selected;
-   correctMap[q.id]=ok;
-   document.querySelectorAll(".option").forEach(b=>b.disabled=true);
-   btn.classList.add("selected",ok?"correct":"wrong");
-   document.querySelectorAll(".option").forEach(b=>{
-    if(b.textContent.startsWith(q.answer+"."))b.classList.add("correct");
-   });
-   $("explanationBox").innerHTML=`<strong>${ok?"答对了":"答错了"}</strong><br>正确答案：${q.answer}<br>解析：${q.explanation}`;
-   $("explanationBox").classList.remove("hidden");
-   $("nextBtn").disabled=false;
-  };
-  box.appendChild(btn);
- });
- $("nextBtn").textContent=current===questions.length-1?"完成并提交":"下一题";
+  selected = "";
+  $("nextBtn").disabled = true;
+  $("explanationBox").classList.add("hidden");
+  $("explanationBox").innerHTML = "";
+
+  const q = questions[current];
+  $("progress").textContent = `第 ${current + 1} / ${questions.length} 题`;
+  $("questionText").textContent = q.text;
+
+  const box = $("options");
+  box.innerHTML = "";
+  ["A","B","C","D"].forEach(letter=>{
+    const btn = document.createElement("button");
+    btn.className = "option";
+    btn.textContent = `${letter}. ${q.options[letter]}`;
+    btn.onclick = ()=>{
+      if(selected) return;
+      selected = letter;
+      const isCorrect = selected === q.answer;
+      answers[q.id] = selected;
+      correctMap[q.id] = isCorrect;
+
+      document.querySelectorAll(".option").forEach(b=>b.disabled = true);
+      btn.classList.add("selected");
+      btn.classList.add(isCorrect ? "correct" : "wrong");
+      document.querySelectorAll(".option").forEach(b=>{
+        if(b.textContent.startsWith(q.answer + ".")) b.classList.add("correct");
+      });
+
+      $("explanationBox").innerHTML =
+        `<strong>${isCorrect ? "答对了" : "答错了"}</strong><br>` +
+        `正确答案：${q.answer}<br>` +
+        `解析：${q.explanation}`;
+      $("explanationBox").classList.remove("hidden");
+      $("nextBtn").disabled = false;
+    };
+    box.appendChild(btn);
+  });
+  $("nextBtn").textContent = current === questions.length - 1 ? "完成并提交" : "下一题";
 }
 
 function nextQuestion(){
- if(current<questions.length-1){current++;renderQuestion()}
- else{finishPractice()}
+  if(current < questions.length - 1){
+    current++;
+    renderQuestion();
+  }else{
+    finishPractice();
+  }
 }
 
 function finishPractice(){
- $("practice").classList.add("hidden");
- $("result").classList.remove("hidden");
- const correctCount=Object.values(correctMap).filter(Boolean).length;
- const score=Math.round(correctCount/questions.length*100);
- const accuracy=`${score}%`;
- const timeUsed=Math.round((Date.now()-startTime)/1000);
+  $("practice").classList.add("hidden");
+  $("result").classList.remove("hidden");
+  const finishedAt = new Date();
+  $("studentInfo").innerHTML =
+    `学校：${quizMeta.school_name}｜教师：${quizMeta.teacher_name}<br>` +
+    `练习：${quizMeta.chapter_name}｜${quizMeta.practice_name}<br>` +
+    `班级：${$("className").value}｜学号：${$("studentNo").value.trim()}｜姓名：${$("studentName").value.trim()}<br>` +
+    `完成时间：${formatDateTime(finishedAt)}`;
+  const correctCount = Object.values(correctMap).filter(Boolean).length;
+  const score = Math.round(correctCount / questions.length * 100);
+  const accuracy = `${score}%`;
+  const timeUsed = Math.round((Date.now() - startTime) / 1000);
+  $("scoreText").textContent = `得分：${score}｜正确率：${accuracy}`;
 
- $("studentInfo").innerHTML=
-  `学校：${quizMeta.school_name}｜教师：${quizMeta.teacher_name}<br>`+
-  `练习：${quizMeta.chapter_name}｜${quizMeta.practice_name}<br>`+
-  `班级：${$("className").value.trim()}｜学号：${$("studentNo").value.trim()}｜姓名：${$("studentName").value.trim()}`;
+  const wrongIds = [];
+  const weakTags = [];
+  const wrongItems = [];
+  questions.forEach(q=>{
+    if(!correctMap[q.id]){
+      wrongIds.push(q.id);
+      weakTags.push(q.knowledge);
+      wrongItems.push(`${q.id}：${q.knowledge}`);
+    }
+  });
 
- $("scoreText").textContent=`得分：${score}｜正确率：${accuracy}`;
+  renderSummary(score, correctCount, wrongItems, [...new Set(weakTags)]);
 
- const wrongIds=[],weakTags=[],wrongItems=[];
- questions.forEach(q=>{
-  if(!correctMap[q.id]){
-   wrongIds.push(q.id);
-   weakTags.push(q.knowledge);
-   wrongItems.push(`${q.id}：${q.knowledge}`);
-  }
- });
-
- renderSummary(score,correctCount,wrongItems,[...new Set(weakTags)]);
-
- submitResult({
-  ...quizMeta,
-  class_name:$("className").value.trim(),
-  student_no:$("studentNo").value.trim(),
-  student_name:$("studentName").value.trim(),
-  seat_no:"",
-  score,
-  accuracy,
-  total_questions:questions.length,
-  time_used:timeUsed,
-  answers_json:answers,
-  correct_json:correctMap,
-  wrong_question_ids:wrongIds,
-  weak_knowledge_tags:[...new Set(weakTags)],
-  abnormal_flag:"none"
- });
+  submitResult({
+    ...quizMeta,
+    class_name: $("className").value,
+    student_no: $("studentNo").value.trim(),
+    student_name: $("studentName").value.trim(),
+    seat_no: $("seatNo").value.trim(),
+    score,
+    accuracy,
+    total_questions: questions.length,
+    time_used: timeUsed,
+    answers_json: answers,
+    correct_json: correctMap,
+    wrong_question_ids: wrongIds,
+    weak_knowledge_tags: [...new Set(weakTags)],
+    abnormal_flag: "none"
+  });
 }
 
-function renderSummary(score,correctCount,wrongItems,weakTags){
- const level=score===100?"表现很好":score>=70?"基本掌握":"需要巩固";
- const advice=score===100?"下一步可以挑战含括号或应用题。":score>=70?"建议重做错题一次，把步骤补稳。":"建议先回到定义、移项和去括号的基本步骤。";
- $("summaryBox").innerHTML=
-  `<strong>学习总结：${level}</strong><br>`+
-  `本次做对 ${correctCount} / ${questions.length} 题。<br>`+
-  `薄弱知识点：${weakTags.length?weakTags.join("、"):"暂无明显薄弱点"}。<br>`+
-  `错题记录：${wrongItems.length?wrongItems.join("；"):"没有错题"}。<br>`+
-  `下一步建议：${advice}`;
+function renderSummary(score, correctCount, wrongItems, weakTags){
+  let level = "";
+  let advice = "";
+  if(score === 100){
+    level = "表现很好";
+    advice = "你已经掌握这组基础题。下一步可以挑战含括号或应用题。";
+  }else if(score >= 70){
+    level = "基本掌握";
+    advice = "你已经有基础，但还要把错题的步骤补稳。建议重做错题一次。";
+  }else{
+    level = "需要巩固";
+    advice = "先不要急着做难题。建议回到定义、移项和去括号的基本步骤。";
+  }
+
+  const weakText = weakTags.length ? weakTags.join("、") : "暂无明显薄弱点";
+  const wrongText = wrongItems.length ? wrongItems.join("；") : "没有错题";
+
+  $("summaryBox").innerHTML =
+    `<strong>学习总结：${level}</strong><br>` +
+    `本次做对 ${correctCount} / ${questions.length} 题。<br>` +
+    `薄弱知识点：${weakText}。<br>` +
+    `错题记录：${wrongText}。<br>` +
+    `下一步建议：${advice}`;
+}
+
+function formatDateTime(date){
+  const pad = n => String(n).padStart(2,"0");
+  return `${date.getFullYear()}-${pad(date.getMonth()+1)}-${pad(date.getDate())} ${pad(date.getHours())}:${pad(date.getMinutes())}`;
 }
 
 async function submitResult(payload){
- try{
-  await fetch(APPS_SCRIPT_URL,{
-   method:"POST",
-   mode:"no-cors",
-   headers:{"Content-Type":"application/json"},
-   body:JSON.stringify(payload)
-  });
-  $("submitStatus").innerHTML='<span class="ok">已提交。</span>老师稍后可查看学习数据。';
- }catch(e){
-  $("submitStatus").innerHTML='<span class="warn">提交失败。</span>请截图成绩给老师。';
- }
+  try{
+    await fetch(APPS_SCRIPT_URL,{
+      method:"POST",
+      mode:"no-cors",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify(payload)
+    });
+    $("submitStatus").innerHTML = '<span class="ok">已提交。</span>老师稍后可查看学习数据。';
+  }catch(err){
+    $("submitStatus").innerHTML = '<span class="warn">提交失败。</span>请截图成绩给老师。';
+  }
 }
 </script>
 </body>
