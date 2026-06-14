@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>一元一次方程式线上测验</title>
+<style>
+:root{--bg:#f6f7fb;--card:#fff;--main:#2563eb;--ok:#16a34a;--bad:#dc2626;--text:#111827;--muted:#6b7280;--line:#e5e7eb}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",Arial,sans-serif;color:var(--text)}
+.wrap{max-width:760px;margin:0 auto;padding:16px}.card{background:var(--card);border-radius:18px;padding:18px;margin:12px 0;box-shadow:0 8px 24px rgba(15,23,42,.07)}
+h1{font-size:22px;margin:0 0 8px}.sub{color:var(--muted);font-size:14px;line-height:1.6}.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}@media(max-width:560px){.row{grid-template-columns:1fr}}
+label{font-size:14px;color:#374151}.field{margin:10px 0}input{width:100%;padding:13px;border:1px solid var(--line);border-radius:12px;font-size:16px;background:#fff}input:focus{outline:2px solid #bfdbfe;border-color:#60a5fa}
+.btn{border:0;border-radius:14px;padding:13px 16px;font-size:16px;font-weight:700;cursor:pointer;background:var(--main);color:#fff;width:100%;margin-top:10px}.btn.secondary{background:#111827}.btn.light{background:#e5e7eb;color:#111827}.btn:disabled{background:#9ca3af;cursor:not-allowed}
+.qtop{display:flex;justify-content:space-between;gap:8px;align-items:center}.badge{font-size:12px;background:#eef2ff;color:#3730a3;border-radius:999px;padding:6px 10px}.qtext{font-size:18px;line-height:1.65;margin:18px 0}.opts{display:grid;gap:10px}.opt{border:1px solid var(--line);border-radius:14px;padding:13px;background:#fff;font-size:16px;line-height:1.4;text-align:left}.opt.selected{border-color:var(--main);background:#eff6ff}.opt.correct{border-color:var(--ok);background:#ecfdf5}.opt.wrong{border-color:var(--bad);background:#fef2f2}.nav{display:grid;grid-template-columns:1fr 1fr;gap:10px}.progress{height:9px;background:#e5e7eb;border-radius:999px;overflow:hidden;margin:12px 0}.bar{height:100%;background:var(--main);width:0}.hidden{display:none}.small{font-size:13px;color:var(--muted);line-height:1.5}.resultLine{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--line)}.explain{font-size:14px;line-height:1.6;color:#374151;margin-top:8px}.ok{color:var(--ok);font-weight:700}.bad{color:var(--bad);font-weight:700}table{width:100%;border-collapse:collapse;font-size:14px}td,th{border-bottom:1px solid var(--line);padding:8px;text-align:left;vertical-align:top}.toast{padding:12px;border-radius:12px;margin-top:10px;background:#fef3c7;color:#92400e;font-size:14px;line-height:1.6}
+</style>
+</head>
+<body>
+<div class="wrap">
+<section class="card" id="intro">
+<h1>一元一次方程式线上测验</h1>
+<div class="sub">宽柔中学古来分校｜陈天龙老师｜2026年上半年<br>初一下册第10章｜一元一次方程式｜共10题</div>
+<div class="toast">请填写资料后开始作答。提交后会显示得分、答案与解析。</div>
+<div class="row">
+<div class="field"><label>班级</label><input id="className" value="初一忠" required></div>
+<div class="field"><label>学号</label><input id="studentNo" inputmode="numeric" placeholder="请输入学号" required></div>
+</div>
+<div class="row">
+<div class="field"><label>姓名</label><input id="studentName" placeholder="请输入姓名" required></div>
+<div class="field"><label>座号（可选）</label><input id="seatNo" inputmode="numeric" placeholder="可不填"></div>
+</div>
+<button class="btn" onclick="startQuiz()">开始作答</button>
+<p class="small">本练习只收集班级、学号、姓名、座号与作答数据，用于教学分析。</p>
+</section>
+
+<section class="card hidden" id="quiz">
+<div class="qtop"><span class="badge" id="qIndex"></span><span class="badge" id="qDiff"></span></div>
+<div class="progress"><div class="bar" id="bar"></div></div>
+<div class="qtext" id="qText"></div>
+<div class="opts" id="opts"></div>
+<div class="nav">
+<button class="btn light" onclick="prevQ()">上一题</button>
+<button class="btn secondary" onclick="nextQ()" id="nextBtn">下一题</button>
+</div>
+<button class="btn" id="submitBtn" onclick="submitQuiz()">提交测验</button>
+<p class="small" id="answerState"></p>
+</section>
+
+<section class="card hidden" id="result">
+<h1>提交结果</h1>
+<div id="submitStatus" class="toast"></div>
+<div class="resultLine"><span>得分</span><strong id="scoreText"></strong></div>
+<div class="resultLine"><span>正确率</span><strong id="rateText"></strong></div>
+<div class="resultLine"><span>总用时</span><strong id="timeText"></strong></div>
+<h2 style="font-size:18px;margin-top:18px">答案与解析</h2>
+<div id="review"></div>
+</section>
+</div>
+<script>
+const META={academicYear:2026,semester:'上半年',school:'宽柔中学古来分校',teacher:'陈天龙老师',teacherId:'陈天龙老师',classDefault:'初一忠',chapterId:'J10',chapterName:'初一下册第10章｜一元一次方程式',practiceId:'J10-2026-S1-C1Z-001',practiceName:'一元一次方程式线上测验（10题）',version:'v1'};
+const questions=[
+{id:'Q1',difficulty:'基础',point:'一元一次方程式定义',goal:'判断一元一次方程式',cause:'把不等式或二元方程误判为一元一次方程式。',text:'下列哪一个是一元一次方程式？',options:['x²+3=7','2x+5=11','x+y=8','3x-2>4'],answer:1,explain:'一元一次方程式只含一个未知数，且未知数最高次数为1，并且是等式，所以选B。'},
+{id:'Q2',difficulty:'基础',point:'等式性质',goal:'用等式性质解简单方程',cause:'两边没有同时减去7。',text:'解方程 x+7=15，x=？',options:['7','8','15','22'],answer:1,explain:'两边同时减去7，得到 x=15-7=8。'},
+{id:'Q3',difficulty:'基础',point:'等式两边同除非零数',goal:'解乘法型一元一次方程',cause:'把乘法关系误处理成减法。',text:'解方程 3x=21，x=？',options:['6','7','18','24'],answer:1,explain:'两边同时除以3，得到 x=21÷3=7。'},
+{id:'Q4',difficulty:'基础',point:'移项与合并',goal:'掌握移项变号',cause:'移项后忘记变号。',text:'解方程 5x-4=16，x=？',options:['2','3','4','5'],answer:2,explain:'5x-4=16，移项得5x=20，所以x=4。'},
+{id:'Q5',difficulty:'基础',point:'去括号',goal:'用分配律解方程',cause:'去括号时没有把2乘进括号内每一项。',text:'解方程 2(x+3)=14，x=？',options:['4','5','7','10'],answer:0,explain:'2(x+3)=14，先两边除以2得x+3=7，所以x=4。也可先去括号。'},
+{id:'Q6',difficulty:'基础',point:'去分母',goal:'处理含分母的一元一次方程',cause:'只处理分数项，漏掉整数项。',text:'解方程 x/3+2=6，x=？',options:['4','8','12','24'],answer:2,explain:'x/3+2=6，移项得x/3=4，所以x=12。'},
+{id:'Q7',difficulty:'基础',point:'方程的解与代入检验',goal:'理解方程的解',cause:'不理解“解”表示代入后等式成立。',text:'若 x=3 是方程 2x+a=10 的解，则 a=？',options:['2','3','4','6'],answer:2,explain:'把x=3代入：2×3+a=10，6+a=10，所以a=4。'},
+{id:'Q8',difficulty:'中等',point:'去括号与移项',goal:'处理含负号括号的方程',cause:'-3(x-2) 去括号时符号出错。',text:'解方程 4-3(x-2)=19，x=？',options:['-3','-1','1','3'],answer:0,explain:'4-3(x-2)=19，去括号得4-3x+6=19，即10-3x=19，-3x=9，所以x=-3。'},
+{id:'Q9',difficulty:'中等',point:'列一元一次方程式',goal:'根据总价关系列方程',cause:'找不到“总价”等量关系。',text:'小明买了5本同价笔记本，又买了3令吉文具，共花28令吉。若每本笔记本为 x 令吉，应列哪一个方程？',options:['5x=28+3','5x+3=28','x+5+3=28','3x+5=28'],answer:1,explain:'5本笔记本总价是5x，再加3令吉文具费，总价为28，所以方程是5x+3=28。'},
+{id:'Q10',difficulty:'挑战',point:'去分母、合并同类项',goal:'综合解含两个分式项的方程',cause:'两边同乘4时，漏乘某一项或括号处理错误。',text:'解方程 (x-1)/2+(x+3)/4=6，x=？',options:['5','6','7','8'],answer:2,explain:'两边同乘4，得2(x-1)+(x+3)=24，即2x-2+x+3=24，3x+1=24，所以x=23/3？注意选项中无此值，本题应检查原题与选项。为避免争议，系统判定此题答案为C并以修正版 (x-1)/2+(x+3)/4=13/2 计算：两边乘4得2x-2+x+3=26，3x+1=26，x=25/3，仍不匹配。'}
+];
+// 修正第10题，确保题目、选项、答案一致
+questions[9]={id:'Q10',difficulty:'挑战',point:'去分母、合并同类项',goal:'综合解含两个分式项的方程',cause:'两边同乘4时，漏乘某一项或括号处理错误。',text:'解方程 (x-1)/2+(x+3)/4=6，若把方程两边同乘4，正确的下一步是？',options:['2(x-1)+(x+3)=24','(x-1)+2(x+3)=24','2x-1+x+3=6','2(x-1)+(x+3)=6'],answer:0,explain:'分母2与4的最小公倍数是4。两边同乘4后，第一项变成2(x-1)，第二项变成x+3，右边变成24，所以选A。'};
+let cur=0,answers=Array(questions.length).fill(null),qStart=0,totalStart=0,timePer=Array(questions.length).fill(0),submitted=false;
+function $(id){return document.getElementById(id)}
+function validStudentNo(v){return /^[0-9A-Za-z\-]{1,20}$/.test(v.trim())}
+function startQuiz(){const cn=$('className').value.trim(),no=$('studentNo').value.trim(),name=$('studentName').value.trim();if(!cn||!no||!name){alert('请填写班级、学号和姓名。');return}if(!validStudentNo(no)){alert('学号只能使用英文字母、数字或短横线，长度不超过20。');return}$('intro').classList.add('hidden');$('quiz').classList.remove('hidden');totalStart=Date.now();qStart=Date.now();renderQ()}
+function saveTime(){if(qStart){timePer[cur]+=Math.round((Date.now()-qStart)/1000);qStart=Date.now()}}
+function renderQ(){const q=questions[cur];$('qIndex').textContent=`第 ${cur+1} / ${questions.length} 题`;$('qDiff').textContent=q.difficulty;$('bar').style.width=((cur+1)/questions.length*100)+'%';$('qText').textContent=q.text;const box=$('opts');box.innerHTML='';q.options.forEach((op,i)=>{const b=document.createElement('button');b.className='opt'+(answers[cur]===i?' selected':'');b.textContent=String.fromCharCode(65+i)+'. '+op;b.onclick=()=>{answers[cur]=i;renderQ()};box.appendChild(b)});$('nextBtn').textContent=cur===questions.length-1?'回到第1题':'下一题';$('answerState').textContent=`已作答 ${answers.filter(x=>x!==null).length} / ${questions.length} 题`;}
+function prevQ(){saveTime();cur=(cur+questions.length-1)%questions.length;renderQ()}
+function nextQ(){saveTime();cur=(cur+1)%questions.length;renderQ()}
+function weakPoints(wrong){const m={};wrong.forEach(x=>m[x.point]=(m[x.point]||0)+1);return Object.entries(m).sort((a,b)=>b[1]-a[1]).map(x=>x[0]).join('、')||'无'}
+async function submitQuiz(){if(submitted)return;saveTime();if(answers.some(x=>x===null)){alert('还有题目未作答，请完成后再提交。');return}submitted=true;$('submitBtn').disabled=true;const totalSec=Math.round((Date.now()-totalStart)/1000);let correct=0;const records=questions.map((q,i)=>{const ok=answers[i]===q.answer;if(ok)correct++;return{questionId:q.id,questionNo:i+1,answer:String.fromCharCode(65+answers[i]),correctAnswer:String.fromCharCode(65+q.answer),isCorrect:ok,usedSeconds:timePer[i],knowledgePoint:q.point,difficulty:q.difficulty,commonCause:q.cause}});const score=Math.round(correct/questions.length*100);const wrong=records.filter(r=>!r.isCorrect);const payload={submitTime:new Date().toISOString(),academicYear:META.academicYear,semester:META.semester,schoolName:META.school,teacherId:META.teacherId,teacherName:META.teacher,className:$('className').value.trim(),practiceId:META.practiceId,practiceName:META.practiceName,practiceVersion:META.version,chapterId:META.chapterId,chapterName:META.chapterName,studentNo:$('studentNo').value.trim(),studentName:$('studentName').value.trim(),seatNo:$('seatNo').value.trim(),score,accuracy:correct/questions.length,totalQuestions:questions.length,totalUsedSeconds:totalSec,answerRecords:records,correctRecords:records.map(r=>r.isCorrect),wrongQuestions:wrong.map(r=>r.questionNo),weakKnowledgePoints:weakPoints(wrong),submitCount:1,isLatest:true,abnormalFlag:totalSec<30?'用时异常短':''};
+let sent=false,msg='';try{const res=await fetch(location.href,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({type:'quiz_submit',payload})});sent=res.ok;msg=sent?'提交成功，作答数据已进入动态数据库。':'提交失败：网络或数据库暂时无法连接，请截图结果交给老师。'}catch(e){msg='提交失败：网络或数据库暂时无法连接，请截图结果交给老师。'}showResult(score,correct,totalSec,records,msg)}
+function showResult(score,correct,totalSec,records,msg){$('quiz').classList.add('hidden');$('result').classList.remove('hidden');$('submitStatus').textContent=msg;$('scoreText').textContent=score+' 分';$('rateText').textContent=Math.round(correct/questions.length*100)+'%';$('timeText').textContent=Math.floor(totalSec/60)+'分'+(totalSec%60)+'秒';const review=$('review');review.innerHTML='';questions.forEach((q,i)=>{const user=answers[i],ok=user===q.answer;const div=document.createElement('div');div.className='card';div.style.boxShadow='none';div.style.border='1px solid var(--line)';div.innerHTML=`<strong>第${i+1}题</strong> <span class="${ok?'ok':'bad'}">${ok?'正确':'错误'}</span><div class="qtext" style="font-size:16px;margin:10px 0">${q.text}</div><table><tr><th>你的答案</th><td>${String.fromCharCode(65+user)}. ${q.options[user]}</td></tr><tr><th>正确答案</th><td>${String.fromCharCode(65+q.answer)}. ${q.options[q.answer]}</td></tr><tr><th>知识点</th><td>${q.point}</td></tr></table><div class="explain"><strong>解析：</strong>${q.explain}<br><strong>常见错因：</strong>${q.cause}</div>`;review.appendChild(div)})}
+</script>
+</body>
+</html>
