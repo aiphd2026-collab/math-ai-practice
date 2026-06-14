@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>初一忠｜一元一次方程式线上练习</title>
+  <style>
+    *{box-sizing:border-box}
+    body{margin:0;font-family:"Microsoft YaHei",Arial,sans-serif;background:linear-gradient(145deg,#fff3df 0%,#f7fbff 50%,#ffe8d6 100%);color:#10212f;min-height:100vh}
+    .wrap{max-width:720px;margin:0 auto;padding:16px}
+    .card{background:rgba(255,255,255,.96);border-radius:18px;padding:18px;box-shadow:0 14px 30px rgba(154,88,42,.14);border:1px solid rgba(255,238,218,.9);margin-bottom:14px}
+    h1{font-size:24px;margin:8px 0;text-align:center;color:#884513}
+    h2{font-size:20px;margin:10px 0;color:#884513}
+    .sub{width:max-content;max-width:100%;margin:10px auto 14px;padding:7px 14px;border-radius:999px;text-align:center;background:#fff0dc;color:#9a4f16;font-size:14px;font-weight:700}
+    label{display:block;margin:10px 0 6px;font-weight:700}
+    input{width:100%;padding:13px 14px;border:1.5px solid #f0d3b6;border-radius:16px;font-size:16px;outline:none;background:#fff}
+    input:focus{border-color:#df7f2a;box-shadow:0 0 0 4px rgba(223,127,42,.14)}
+    button{width:100%;padding:14px;border:0;border-radius:18px;background:linear-gradient(105deg,#f28c28,#b84f1d);color:#fff;font-size:17px;font-weight:800;margin-top:14px;cursor:pointer;box-shadow:0 8px 16px rgba(184,79,29,.22)}
+    button:disabled{background:linear-gradient(105deg,#b8c9d5,#93a7b4);box-shadow:none;cursor:not-allowed}
+    .q{font-size:20px;font-weight:800;margin:12px 0;line-height:1.5}
+    .option{display:block;width:100%;text-align:left;background:#fffaf3;color:#3d2b1f;border:2px solid #f2dcc2;border-radius:16px;margin:10px 0;font-weight:700;box-shadow:0 2px 6px rgba(154,88,42,.06)}
+    .option.selected{background:#ffe1bd;border-color:#f28c28}
+    .option.correct{background:#d9f5e0;border-color:#2e7d32}
+    .option.wrong{background:#ffe0e0;border-color:#c62828}
+    .explain{margin-top:14px;padding:13px;border-radius:16px;background:#fff9e8;border:1px solid #ffe0a3;line-height:1.6}
+    .hidden{display:none}
+    .result{font-size:20px;font-weight:800}
+    .small{color:#5d6b75;font-size:14px;line-height:1.5}
+    .ok{color:#2e7d32;font-weight:800}
+    .warn{color:#c62828;font-weight:800}
+    .line{padding:8px 0;border-bottom:1px dashed #efd9c4;line-height:1.6}
+    .tag{display:inline-block;margin:4px 4px 0 0;padding:4px 9px;border-radius:999px;background:#fff0dc;color:#884513;font-weight:700;font-size:13px}
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <div class="card" id="home">
+    <h1>初一忠｜一元一次方程式线上练习</h1>
+    <div class="sub">宽柔中学古来分校｜陈天龙老师</div>
+    <p class="small">初一下册第10章｜一元一次方程式｜线上练习｜即时反馈</p>
+
+    <label>班级</label>
+    <input id="className" placeholder="请输入班级，例如：初一忠" autocomplete="off">
+
+    <label>学号</label>
+    <input id="studentNo" inputmode="numeric" placeholder="请输入学号" autocomplete="off">
+
+    <label>姓名</label>
+    <input id="studentName" placeholder="请输入姓名" autocomplete="off">
+
+    <label>座号（可选）</label>
+    <input id="seatNo" inputmode="numeric" placeholder="如老师有要求，请填写座号" autocomplete="off">
+
+    <button onclick="startPractice()">开始练习</button>
+    <p class="small">每题作答后会立即显示解析，完成后会提交学习数据给老师。</p>
+  </div>
+
+  <div class="card hidden" id="practice">
+    <div class="small" id="progress"></div>
+    <div class="q" id="questionText"></div>
+    <div id="options"></div>
+    <div id="feedback" class="explain hidden"></div>
+    <button id="nextBtn" onclick="goNext()" disabled>下一题</button>
+  </div>
+
+  <div class="card hidden" id="resultPage">
+    <h1>练习完成</h1>
+    <div class="result" id="scoreText"></div>
+    <div id="resultInfo"></div>
+    <h2>错题记录</h2>
+    <div id="wrongList" class="small"></div>
+    <h2>薄弱知识点</h2>
+    <div id="weakList"></div>
+    <h2>学习总结</h2>
+    <div id="summary" class="small"></div>
+    <h2>提交状态</h2>
+    <div id="submitStatus" class="small">正在提交，请不要关闭页面。</div>
+  </div>
+</div>
+
+<script>
+const SUBMIT_URL = "https://script.google.com/macros/s/AKfycbxftIDXQRZcwvFSznSsMA60JBeiEzlmGfmPzvJdS_Np6d7_QcsfBOQ500tZTKQU-YG1/exec";
+const META = {
+  school_id:"school_kuanrou_kulai",
+  school_name:"宽柔中学古来分校",
+  teacher_id:"teacher_chen_tianlong",
+  teacher_name:"陈天龙老师",
+  academic_year:"2026",
+  semester:"上学期",
+  class_id:"2026_s1_chuyi_zhong",
+  practice_id:"J10-CYZ-20260614-001",
+  practice_name:"初一忠｜一元一次方程式线上练习",
+  practice_round:"1",
+  quiz_id:"quiz_J10_CYZ_20260614_001",
+  quiz_name:"初一忠｜一元一次方程式线上练习",
+  chapter_name:"初一下册第10章｜一元一次方程式"
+};
+const QUESTIONS = [
+  {id:"Q1",text:"下列哪一个是一元一次方程式？",options:{A:"x+5=12",B:"x²+1=5",C:"x+y=8",D:"3x+2"},answer:"A",knowledge:"一元一次方程式的定义",explanation:"一元一次方程式必须只含一个未知数，且未知数次数为1，并且是等式。",difficulty:"基础",commonMistake:"把代数式误认为方程，或忽略未知数次数。",target:"判断一元一次方程式"},
+  {id:"Q2",text:"解方程：x+7=15",options:{A:"6",B:"7",C:"8",D:"9"},answer:"C",knowledge:"等式两边同时减同一数",explanation:"两边同时减7，得 x=15−7=8。",difficulty:"基础",commonMistake:"移项时忘记改变符号。",target:"会用等式性质解简单方程"},
+  {id:"Q3",text:"解方程：3x=21",options:{A:"6",B:"7",C:"8",D:"9"},answer:"B",knowledge:"等式两边同时除以同一非零数",explanation:"两边同时除以3，得 x=21÷3=7。",difficulty:"基础",commonMistake:"把乘法关系误处理成减法。",target:"会处理ax=b型方程"},
+  {id:"Q4",text:"解方程：2x−5=13",options:{A:"4",B:"6",C:"8",D:"9"},answer:"D",knowledge:"移项与合并",explanation:"2x−5=13，2x=18，所以 x=9。",difficulty:"基础",commonMistake:"−5移到右边后没有变成+5。",target:"掌握移项解方程"},
+  {id:"Q5",text:"解方程：4x+3=19",options:{A:"3",B:"4",C:"5",D:"6"},answer:"B",knowledge:"一元一次方程的基本解法",explanation:"先减3得4x=16，再除以4，得x=4。",difficulty:"基础",commonMistake:"先除以4，忽略要先减3。",target:"按正确步骤解方程"},
+  {id:"Q6",text:"解方程：2(x+3)=16",options:{A:"5",B:"6",C:"7",D:"8"},answer:"A",knowledge:"去括号",explanation:"2(x+3)=16，得2x+6=16，所以2x=10，x=5。",difficulty:"基础",commonMistake:"去括号时漏乘括号内每一项。",target:"会解含括号的一元一次方程"},
+  {id:"Q7",text:"解方程：x/3+2=5",options:{A:"6",B:"7",C:"8",D:"9"},answer:"D",knowledge:"含分母方程",explanation:"x/3+2=5，x/3=3，所以x=9。",difficulty:"基础",commonMistake:"没有先把常数项移到另一边。",target:"会处理简单分母方程"},
+  {id:"Q8",text:"解方程：5x+4=2x+19",options:{A:"3",B:"4",C:"5",D:"6"},answer:"C",knowledge:"未知数项与常数项分别移项",explanation:"5x−2x=19−4，得3x=15，所以x=5。",difficulty:"中等",commonMistake:"未知数项和常数项混在一起移项。",target:"会解两边都有未知数的方程"},
+  {id:"Q9",text:"方程 2(x+3)=2x+7 的解的情况是：",options:{A:"x=1",B:"x=3",C:"无解",D:"任意数都是解"},answer:"C",knowledge:"特殊方程的解",explanation:"展开得2x+6=2x+7，消去2x后得到6=7，这是矛盾式，所以无解。",difficulty:"中等",commonMistake:"看到x被消去后，不会判断矛盾式。",target:"会判断无解情况"},
+  {id:"Q10",text:"一支笔的价格是x元，一个笔记本比一支笔贵2元。买3支笔和2个笔记本共花19元。可列方程为：",options:{A:"3x+2x=19",B:"3x+2(x+2)=19",C:"3(x+2)+2x=19",D:"5(x+2)=19"},answer:"B",knowledge:"列一元一次方程解决购物问题",explanation:"3支笔是3x元，2个笔记本是2(x+2)元，总价为19元，所以列式为3x+2(x+2)=19。",difficulty:"挑战",commonMistake:"没有把“笔记本比笔贵2元”表示成x+2。",target:"会根据数量关系列方程"}
+];
+let currentIndex = 0;
+let answers = [];
+let startTime = 0;
+let questionStartTime = 0;
+let locked = false;
+let student = {};
+
+function $(id){return document.getElementById(id);}
+function escapeHtml(s){return String(s).replace(/[&<>'"]/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#39;","\"":"&quot;"}[m]));}
+function validateStudent(){
+  const className = $("className").value.trim();
+  const studentNo = $("studentNo").value.trim();
+  const studentName = $("studentName").value.trim();
+  const seatNo = $("seatNo").value.trim();
+  if(!className){alert("请填写班级");return null;}
+  if(!/^\d{1,4}$/.test(studentNo)){alert("请填写正确学号，只能输入数字");return null;}
+  if(!studentName){alert("请填写姓名");return null;}
+  if(seatNo && !/^\d{1,4}$/.test(seatNo)){alert("座号只能输入数字");return null;}
+  return {class_name:className,student_no:studentNo,student_name:studentName,seat_no:seatNo};
+}
+function startPractice(){
+  const s = validateStudent();
+  if(!s)return;
+  student = s;
+  startTime = Date.now();
+  currentIndex = 0;
+  answers = [];
+  $("home").classList.add("hidden");
+  $("practice").classList.remove("hidden");
+  showQuestion();
+}
+function showQuestion(){
+  locked = false;
+  questionStartTime = Date.now();
+  const q = QUESTIONS[currentIndex];
+  $("progress").textContent = "第 " + (currentIndex+1) + " 题 / 共 " + QUESTIONS.length + " 题｜" + q.difficulty;
+  $("questionText").textContent = q.text;
+  const box = $("options");
+  box.innerHTML = "";
+  Object.keys(q.options).forEach(k=>{
+    const btn = document.createElement("button");
+    btn.className = "option";
+    btn.textContent = k + ". " + q.options[k];
+    btn.onclick = ()=>selectOption(k,btn);
+    box.appendChild(btn);
+  });
+  $("feedback").classList.add("hidden");
+  $("feedback").innerHTML = "";
+  const nextBtn = $("nextBtn");
+  nextBtn.disabled = true;
+  nextBtn.textContent = currentIndex === QUESTIONS.length-1 ? "完成并提交" : "下一题";
+}
+function selectOption(choice,btn){
+  if(locked)return;
+  locked = true;
+  const q = QUESTIONS[currentIndex];
+  const isCorrect = choice === q.answer;
+  const elapsed = Math.round((Date.now()-questionStartTime)/1000);
+  answers[currentIndex] = {
+    question_id:q.id,
+    question_no:currentIndex+1,
+    selected:choice,
+    answer:q.answer,
+    correct:isCorrect,
+    knowledge:q.knowledge,
+    difficulty:q.difficulty,
+    common_mistake:q.commonMistake,
+    time_used:elapsed,
+    answered_at:new Date().toISOString()
+  };
+  const buttons = document.querySelectorAll(".option");
+  buttons.forEach(b=>b.disabled=true);
+  btn.classList.add("selected");
+  buttons.forEach(b=>{
+    if(b.textContent.startsWith(q.answer+"."))b.classList.add("correct");
+  });
+  if(!isCorrect)btn.classList.add("wrong");
+  $("feedback").innerHTML =
+    "<strong class='"+(isCorrect?"ok":"warn")+"'>"+(isCorrect?"答对了":"答错了")+"</strong><br>"+
+    "正确答案：<strong>"+q.answer+"</strong><br>"+
+    "解析："+escapeHtml(q.explanation)+"<br>"+
+    "知识点："+escapeHtml(q.knowledge);
+  $("feedback").classList.remove("hidden");
+  $("nextBtn").disabled = false;
+}
+function goNext(){
+  if(!answers[currentIndex])return;
+  if(currentIndex < QUESTIONS.length-1){
+    currentIndex++;
+    showQuestion();
+  }else{
+    finishAndSubmit();
+  }
+}
+function finishAndSubmit(){
+  $("practice").classList.add("hidden");
+  $("resultPage").classList.remove("hidden");
+  const total = QUESTIONS.length;
+  const correctCount = answers.filter(a=>a && a.correct).length;
+  const score = Math.round(correctCount / total * 100);
+  const accuracy = Math.round(correctCount / total * 100);
+  const timeUsed = Math.round((Date.now()-startTime)/1000);
+  const wrongs = answers.filter(a=>a && !a.correct);
+  const weakTags = [...new Set(wrongs.map(w=>w.knowledge))];
+  const wrongIds = wrongs.map(w=>w.question_id);
+  $("scoreText").textContent = "得分：" + score + " 分｜正确率：" + accuracy + "%";
+  $("resultInfo").innerHTML =
+    line("学校",META.school_name)+line("老师",META.teacher_name)+line("练习名称",META.practice_name)+line("章节",META.chapter_name)+
+    line("班级",student.class_name)+line("学号",student.student_no)+line("姓名",student.student_name)+line("座号",student.seat_no||"未填写")+
+    line("用时",timeUsed+" 秒");
+  $("wrongList").innerHTML = wrongs.length ? wrongs.map(w=>"<div class='line'>第"+w.question_no+"题：你的答案 "+w.selected+"，正确答案 "+w.answer+"｜"+escapeHtml(w.knowledge)+"</div>").join("") : "<span class='ok'>本次没有错题，继续保持。</span>";
+  $("weakList").innerHTML = weakTags.length ? weakTags.map(t=>"<span class='tag'>"+escapeHtml(t)+"</span>").join("") : "<span class='tag'>暂无明显薄弱点</span>";
+  $("summary").innerHTML = buildSummary(score, weakTags);
+  const payload = {
+    submitted_at:new Date().toISOString(),
+    school_id:META.school_id,
+    school_name:META.school_name,
+    teacher_id:META.teacher_id,
+    teacher_name:META.teacher_name,
+    academic_year:META.academic_year,
+    semester:META.semester,
+    class_id:META.class_id,
+    class_name:student.class_name,
+    student_no:student.student_no,
+    student_name:student.student_name,
+    seat_no:student.seat_no||"",
+    practice_id:META.practice_id,
+    practice_name:META.practice_name,
+    practice_round:META.practice_round,
+    quiz_id:META.quiz_id,
+    quiz_name:META.quiz_name,
+    chapter_name:META.chapter_name,
+    score:score,
+    accuracy:accuracy,
+    total_questions:total,
+    time_used:timeUsed,
+    answers_json:JSON.stringify(answers),
+    correct_json:JSON.stringify(answers.map(a=>({question_id:a.question_id,correct:a.correct,selected:a.selected,answer:a.answer}))),
+    wrong_question_ids:wrongIds.join(","),
+    weak_knowledge_tags:weakTags.join("｜"),
+    abnormal_flag:timeUsed < 20 ? "用时异常短" : ""
+  };
+  submitData(payload);
+}
+function line(k,v){return "<div class='line'><strong>"+escapeHtml(k)+"：</strong>"+escapeHtml(v)+"</div>";}
+function buildSummary(score, weakTags){
+  if(score>=90)return "你对一元一次方程式的基本概念与解题步骤掌握较好。下一步可加强应用题列方程训练。";
+  if(score>=60)return "你已掌握部分基础题，但在步骤完整性或移项处理上还需要更稳定。建议复习错题对应知识点："+escapeHtml(weakTags.join("、")||"基础解方程")+"。";
+  return "本章基础还需要加强。建议先复习一元一次方程式定义、移项、去括号、去分母，再完成同类补救练习。";
+}
+async function submitData(payload){
+  const status = $("submitStatus");
+  try{
+    if(!SUBMIT_URL.includes("script.google.com/macros/s/") || !SUBMIT_URL.includes("/exec")){
+      throw new Error("提交地址未正确设置");
+    }
+    const formBody = new URLSearchParams();
+    Object.keys(payload).forEach(k=>formBody.append(k,String(payload[k] ?? "")));
+    const res = await fetch(SUBMIT_URL,{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded;charset=UTF-8"},body:formBody.toString()});
+    if(!res.ok)throw new Error("提交未成功");
+    status.innerHTML = "<span class='ok'>已提交，老师稍后可查看学习数据。</span>";
+  }catch(e){
+    status.innerHTML = "<span class='warn'>提交失败，请截图给老师。</span>";
+  }
+}
+</script>
+</body>
+</html>
