@@ -1,0 +1,323 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>初三下册第8章《圆》5题线上练习</title>
+  <style>
+    *{box-sizing:border-box}
+    body{margin:0;font-family:"Microsoft YaHei",Arial,sans-serif;background:linear-gradient(145deg,#fff3df 0%,#f7fbff 48%,#ffe8d6 100%);color:#10212f;min-height:100vh}
+    .wrap{max-width:720px;margin:0 auto;padding:16px}
+    .card{background:rgba(255,255,255,.96);border-radius:18px;padding:18px;box-shadow:0 14px 30px rgba(154,88,42,.14);border:1px solid rgba(255,238,218,.9);margin-bottom:14px}
+    h1{font-size:24px;margin:8px 0;text-align:center;color:#884513}
+    .sub{width:max-content;max-width:100%;margin:10px auto 14px;padding:7px 14px;border-radius:999px;text-align:center;background:#fff0dc;color:#9a4f16;font-size:14px;font-weight:700}
+    label{display:block;margin:10px 0 6px;font-weight:700}
+    input{width:100%;padding:13px 14px;border:1.5px solid #f0d3b6;border-radius:16px;font-size:16px;outline:none;background:#fff}
+    input:focus{border-color:#df7f2a;box-shadow:0 0 0 4px rgba(223,127,42,.14)}
+    button{width:100%;padding:14px;border:0;border-radius:18px;background:linear-gradient(105deg,#f28c28,#b84f1d);color:#fff;font-size:17px;font-weight:800;margin-top:14px;cursor:pointer;box-shadow:0 8px 16px rgba(184,79,29,.22)}
+    button:disabled{background:linear-gradient(105deg,#b8c9d5,#93a7b4);box-shadow:none;cursor:not-allowed}
+    .q{font-size:20px;font-weight:800;margin:12px 0;line-height:1.5}
+    .option{display:block;width:100%;text-align:left;background:#fffaf3;color:#3d2b1f;border:2px solid #f2dcc2;border-radius:16px;margin:10px 0;font-weight:700;box-shadow:0 2px 6px rgba(154,88,42,.06)}
+    .option.selected{background:#ffe1bd;border-color:#f28c28}
+    .option.correct{background:#d9f5e0;border-color:#2e7d32}
+    .option.wrong{background:#ffe0e0;border-color:#c62828}
+    .explain{margin-top:14px;padding:13px;border-radius:16px;background:#fff9e8;border:1px solid #ffe0a3;line-height:1.6}
+    .hidden{display:none}
+    .result{font-size:20px;font-weight:800}
+    .small{color:#5d6b75;font-size:14px;line-height:1.5}
+    .ok{color:#2e7d32;font-weight:800}
+    .warn{color:#c62828;font-weight:800}
+    .line{padding:8px 0;border-bottom:1px dashed #efd8be;line-height:1.55}
+    .tag{display:inline-block;margin:4px 6px 2px 0;padding:5px 9px;border-radius:999px;background:#fff0dc;color:#9a4f16;font-size:13px;font-weight:700}
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <div class="card" id="home">
+    <h1>初三下册第8章《圆》5题线上练习</h1>
+    <div class="sub">宽柔中学古来分校｜陈天龙｜j36_20260615_001</div>
+    <p class="small">初三下册第8章｜圆｜线上练习｜即时反馈</p>
+
+    <label>班级</label>
+    <input id="className" placeholder="请输入班级，例如：初三忠">
+
+    <label>学号</label>
+    <input id="studentNo" inputmode="numeric" placeholder="请输入学号">
+
+    <label>姓名</label>
+    <input id="studentName" placeholder="请输入姓名">
+
+    <label>座号（可选）</label>
+    <input id="seatNo" inputmode="numeric" placeholder="如老师有要求，请填写座号">
+
+    <button onclick="startPractice()">开始练习</button>
+    <p class="small">每题作答后会立即显示解析，完成后会提交学习数据给老师。</p>
+  </div>
+
+  <div class="card hidden" id="practice">
+    <div class="small" id="progress"></div>
+    <div class="q" id="questionText"></div>
+    <div id="options"></div>
+    <div id="explanation" class="explain hidden"></div>
+    <button id="nextBtn" class="hidden" onclick="goNext()">下一题</button>
+  </div>
+
+  <div class="card hidden" id="finish">
+    <h1>完成页</h1>
+    <div class="result" id="scoreText"></div>
+    <div id="summaryBlock"></div>
+    <div class="explain" id="submitStatus">正在发送学习数据……</div>
+    <p class="small">请保留本页截图，方便老师查看。</p>
+  </div>
+</div>
+
+<script>
+const SUBMIT_URL = "https://script.google.com/macros/s/AKfycbxftIDXQRZcwvFSznSsMA60JBeiEzlmGfmPzvJdS_Np6d7_QcsfBOQ500tZTKQU-YG1/exec";
+const SCHOOL_ID = "kchc";
+const SCHOOL_NAME = "宽柔中学古来分校";
+const TEACHER_ID = "chen_tianlong";
+const TEACHER_NAME = "陈天龙";
+const ACADEMIC_YEAR = 2026;
+const SEMESTER = "上学期";
+const PRACTICE_ID = "j36_20260615_001";
+const PRACTICE_NAME = "初三下册第8章《圆》5题线上练习";
+const PRACTICE_ROUND = "1";
+const QUIZ_ID = "j36_20260615_001_quiz";
+const QUIZ_NAME = "初三下册第8章《圆》5题线上练习";
+const CHAPTER_NAME = "初三下册第8章｜圆";
+
+const QUESTIONS = [
+  {
+    id:"Q1",
+    text:"在同圆中，若圆心角 ∠AOB = 80°，则它所对同弧上的圆周角 ∠ACB 等于多少？",
+    options:{A:"40°",B:"80°",C:"100°",D:"160°"},
+    answer:"A",
+    knowledge:"圆心角与圆周角关系",
+    explanation:"同弧所对的圆周角等于圆心角的一半，所以 ∠ACB = 80° ÷ 2 = 40°。",
+    difficulty:"基础",
+    commonMistake:"把圆周角是圆心角一半用反。"
+  },
+  {
+    id:"Q2",
+    text:"若四边形 ABCD 是圆内接四边形，且 ∠A = 72°，则 ∠C 等于多少？",
+    options:{A:"72°",B:"108°",C:"118°",D:"144°"},
+    answer:"B",
+    knowledge:"圆内接四边形对角互补",
+    explanation:"圆内接四边形的对角互补，所以 ∠C = 180° − 72° = 108°。",
+    difficulty:"基础",
+    commonMistake:"误以为圆内接四边形的对角相等。"
+  },
+  {
+    id:"Q3",
+    text:"圆 O 中，直径 AB 垂直弦 CD 于点 E。若 CD = 12 cm，则 CE 等于多少？",
+    options:{A:"12 cm",B:"8 cm",C:"6 cm",D:"4 cm"},
+    answer:"C",
+    knowledge:"垂径定理",
+    explanation:"垂直于弦的直径平分这条弦，所以 CE = CD ÷ 2 = 6 cm。",
+    difficulty:"基础",
+    commonMistake:"只记得垂直，忘记平分弦。"
+  },
+  {
+    id:"Q4",
+    text:"圆 O 的半径为 5 cm，点 P 到圆心 O 的距离 OP = 5 cm。点 P 与圆的位置关系是？",
+    options:{A:"点 P 在圆外",B:"点 P 在圆内",C:"点 P 不确定",D:"点 P 在圆上"},
+    answer:"D",
+    knowledge:"点与圆的位置关系",
+    explanation:"点到圆心的距离等于半径时，点在圆上。",
+    difficulty:"基础",
+    commonMistake:"把等于半径误判为圆内。"
+  },
+  {
+    id:"Q5",
+    text:"已知直线 l 与圆 O 只有一个公共点 P，则直线 l 是圆 O 的什么线？",
+    options:{A:"弦",B:"割线",C:"切线",D:"直径"},
+    answer:"C",
+    knowledge:"直线与圆的位置关系",
+    explanation:"与圆只有一个公共点的直线叫做切线，该公共点叫切点。",
+    difficulty:"中等",
+    commonMistake:"把切线和割线混淆。"
+  }
+];
+
+let orderedQuestions = [];
+let currentIndex = 0;
+let startTime = 0;
+let profile = {};
+let answers = [];
+let locked = false;
+
+function $(id){return document.getElementById(id);}
+function hide(id){$(id).classList.add("hidden");}
+function show(id){$(id).classList.remove("hidden");}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c];});}
+function shuffleCopy(arr){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    const t = a[i]; a[i] = a[j]; a[j] = t;
+  }
+  return a;
+}
+function uniq(arr){return Array.from(new Set(arr.filter(Boolean)));}
+
+function startPractice(){
+  const className = $("className").value.trim();
+  const studentNo = $("studentNo").value.trim();
+  const studentName = $("studentName").value.trim();
+  const seatNo = $("seatNo").value.trim();
+  if(!className){alert("请填写班级");return;}
+  if(!/^[0-9]{1,20}$/.test(studentNo)){alert("请填写正确的学号，只能输入数字");return;}
+  if(!studentName){alert("请填写姓名");return;}
+  if(seatNo && !/^[0-9]{1,20}$/.test(seatNo)){alert("座号只能输入数字");return;}
+  profile = {className, studentNo, studentName, seatNo};
+  orderedQuestions = shuffleCopy(QUESTIONS);
+  currentIndex = 0;
+  startTime = Date.now();
+  answers = [];
+  hide("home");
+  show("practice");
+  renderQuestion();
+}
+
+function renderQuestion(){
+  locked = false;
+  const q = orderedQuestions[currentIndex];
+  $("progress").textContent = "第 " + (currentIndex+1) + " 题 / 共 " + orderedQuestions.length + " 题";
+  $("questionText").textContent = q.text;
+  const box = $("options");
+  box.innerHTML = "";
+  ["A","B","C","D"].forEach(function(k){
+    const btn = document.createElement("button");
+    btn.className = "option";
+    btn.textContent = k + ". " + q.options[k];
+    btn.onclick = function(){chooseAnswer(k, btn);};
+    box.appendChild(btn);
+  });
+  $("explanation").innerHTML = "";
+  hide("explanation");
+  const nextBtn = $("nextBtn");
+  nextBtn.textContent = currentIndex === orderedQuestions.length - 1 ? "完成并提交" : "下一题";
+  hide("nextBtn");
+}
+
+function chooseAnswer(choice, chosenBtn){
+  if(locked){return;}
+  locked = true;
+  const q = orderedQuestions[currentIndex];
+  const correct = choice === q.answer;
+  const optionButtons = document.querySelectorAll(".option");
+  optionButtons.forEach(function(btn){
+    btn.disabled = true;
+    const key = btn.textContent.substring(0,1);
+    if(key === choice){btn.classList.add("selected");}
+    if(key === q.answer){btn.classList.add("correct");}
+    if(key === choice && !correct){btn.classList.add("wrong");}
+  });
+  answers.push({
+    question_id:q.id,
+    display_order:currentIndex+1,
+    question_text:q.text,
+    selected_answer:choice,
+    correct_answer:q.answer,
+    is_correct:correct,
+    knowledge_tag:q.knowledge,
+    difficulty:q.difficulty
+  });
+  $("explanation").innerHTML =
+    "<div class='" + (correct ? "ok" : "warn") + "'>" + (correct ? "答对了" : "答错了") + "</div>" +
+    "<div>正确答案：" + q.answer + ". " + esc(q.options[q.answer]) + "</div>" +
+    "<div>解析：" + esc(q.explanation) + "</div>" +
+    "<div>本题知识点：" + esc(q.knowledge) + "</div>";
+  show("explanation");
+  show("nextBtn");
+}
+
+function goNext(){
+  if(currentIndex < orderedQuestions.length - 1){
+    currentIndex++;
+    renderQuestion();
+  }else{
+    finishPractice();
+  }
+}
+
+function finishPractice(){
+  hide("practice");
+  show("finish");
+  const totalQuestions = orderedQuestions.length;
+  const correctCount = answers.filter(function(a){return a.is_correct;}).length;
+  const score = Math.round(correctCount / totalQuestions * 100);
+  const accuracy = score;
+  const timeUsed = Math.max(1, Math.round((Date.now() - startTime) / 1000));
+  const wrongAnswers = answers.filter(function(a){return !a.is_correct;});
+  const wrongQuestionIds = wrongAnswers.map(function(a){return a.question_id;});
+  const weakKnowledgeTags = uniq(wrongAnswers.map(function(a){return a.knowledge_tag;}));
+  const correctJson = {};
+  answers.forEach(function(a){correctJson[a.question_id] = a.is_correct;});
+  $("scoreText").innerHTML = "得分：" + score + " 分｜正确率：" + accuracy + "%";
+  const wrongText = wrongAnswers.length ? wrongAnswers.map(function(a){return a.display_order + ". " + a.question_id + "｜" + a.knowledge_tag;}).join("<br>") : "本次没有错题。";
+  const weakText = weakKnowledgeTags.length ? weakKnowledgeTags.map(function(t){return "<span class='tag'>" + esc(t) + "</span>";}).join("") : "暂无明显薄弱知识点。";
+  const learningSummary = weakKnowledgeTags.length ? "建议优先复习：" + weakKnowledgeTags.join("、") + "。" : "本次掌握较好，可继续练习圆周角、垂径定理与切线相关综合题。";
+  $("summaryBlock").innerHTML =
+    "<div class='line'>学校：" + esc(SCHOOL_NAME) + "</div>" +
+    "<div class='line'>老师：" + esc(TEACHER_NAME) + "</div>" +
+    "<div class='line'>练习名称：" + esc(PRACTICE_NAME) + "</div>" +
+    "<div class='line'>章节：" + esc(CHAPTER_NAME) + "</div>" +
+    "<div class='line'>班级：" + esc(profile.className) + "</div>" +
+    "<div class='line'>学号：" + esc(profile.studentNo) + "</div>" +
+    "<div class='line'>姓名：" + esc(profile.studentName) + "</div>" +
+    "<div class='line'>座号：" + esc(profile.seatNo || "未填写") + "</div>" +
+    "<div class='line'>得分：" + score + " 分</div>" +
+    "<div class='line'>正确率：" + accuracy + "%</div>" +
+    "<div class='line'>错题记录：<br>" + wrongText + "</div>" +
+    "<div class='line'>薄弱知识点：<br>" + weakText + "</div>" +
+    "<div class='line'>学习总结：" + esc(learningSummary) + "</div>";
+  const payload = {
+    action:"submit_response",
+    school_id:SCHOOL_ID,
+    school_name:SCHOOL_NAME,
+    teacher_id:TEACHER_ID,
+    teacher_name:TEACHER_NAME,
+    academic_year:ACADEMIC_YEAR,
+    semester:SEMESTER,
+    class_id:profile.className,
+    class_name:profile.className,
+    student_no:profile.studentNo,
+    student_name:profile.studentName,
+    seat_no:profile.seatNo,
+    practice_id:PRACTICE_ID,
+    practice_name:PRACTICE_NAME,
+    practice_round:PRACTICE_ROUND,
+    quiz_id:QUIZ_ID,
+    quiz_name:QUIZ_NAME,
+    chapter_name:CHAPTER_NAME,
+    score:score,
+    accuracy:accuracy,
+    total_questions:totalQuestions,
+    time_used:timeUsed,
+    answers_json:answers,
+    correct_json:correctJson,
+    wrong_question_ids:wrongQuestionIds,
+    weak_knowledge_tags:weakKnowledgeTags,
+    abnormal_flag:"none"
+  };
+  sendPayload(payload);
+}
+
+function sendPayload(payload){
+  fetch(SUBMIT_URL,{
+    method:"POST",
+    mode:"no-cors",
+    headers:{
+      "Content-Type":"text/plain;charset=utf-8"
+    },
+    body:JSON.stringify(payload)
+  }).then(function(){
+    $("submitStatus").textContent = "提交状态：已发送。若老师稍后未看到数据，请截图给老师。";
+  }).catch(function(){
+    $("submitStatus").textContent = "提交状态：提交失败，请截图给老师。";
+  });
+}
+</script>
+</body>
+</html>
