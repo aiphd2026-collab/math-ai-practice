@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>初一下册第8章 记数制度 线上练习</title>
+  <style>
+    *{box-sizing:border-box}
+    body{margin:0;font-family:"Microsoft YaHei",Arial,sans-serif;background:linear-gradient(145deg,#fff3df 0%,#f7fbff 48%,#ffe8d6 100%);color:#10212f;min-height:100vh}
+    .wrap{max-width:720px;margin:0 auto;padding:16px}
+    .card{background:rgba(255,255,255,.96);border-radius:18px;padding:18px;box-shadow:0 14px 30px rgba(154,88,42,.14);border:1px solid rgba(255,238,218,.9);margin-bottom:14px}
+    h1{font-size:24px;margin:8px 0;text-align:center;color:#884513}
+    .sub{width:max-content;max-width:100%;margin:10px auto 14px;padding:7px 14px;border-radius:999px;text-align:center;background:#fff0dc;color:#9a4f16;font-size:14px;font-weight:700}
+    label{display:block;margin:10px 0 6px;font-weight:700}
+    input{width:100%;padding:13px 14px;border:1.5px solid #f0d3b6;border-radius:16px;font-size:16px;outline:none;background:#fff}
+    input:focus{border-color:#df7f2a;box-shadow:0 0 0 4px rgba(223,127,42,.14)}
+    button{width:100%;padding:14px;border:0;border-radius:18px;background:linear-gradient(105deg,#f28c28,#b84f1d);color:#fff;font-size:17px;font-weight:800;margin-top:14px;cursor:pointer;box-shadow:0 8px 16px rgba(184,79,29,.22)}
+    button:disabled{background:linear-gradient(105deg,#b8c9d5,#93a7b4);box-shadow:none;cursor:not-allowed}
+    .q{font-size:20px;font-weight:800;margin:12px 0;line-height:1.5}
+    .option{display:block;width:100%;text-align:left;background:#fffaf3;color:#3d2b1f;border:2px solid #f2dcc2;border-radius:16px;margin:10px 0;font-weight:700;box-shadow:0 2px 6px rgba(154,88,42,.06)}
+    .option.selected{background:#ffe1bd;border-color:#f28c28}
+    .option.correct{background:#d9f5e0;border-color:#2e7d32}
+    .option.wrong{background:#ffe0e0;border-color:#c62828}
+    .explain{margin-top:14px;padding:13px;border-radius:16px;background:#fff9e8;border:1px solid #ffe0a3;line-height:1.6}
+    .hidden{display:none}
+    .result{font-size:20px;font-weight:800}
+    .small{color:#5d6b75;font-size:14px;line-height:1.5}
+    .ok{color:#2e7d32;font-weight:800}
+    .warn{color:#c62828;font-weight:800}
+    .row{padding:8px 0;border-bottom:1px dashed #ead8c4;line-height:1.55}
+    .tag{display:inline-block;padding:3px 8px;border-radius:999px;background:#fff0dc;color:#8a4614;font-weight:700;font-size:13px;margin:2px}
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <div class="card" id="home">
+    <h1>初一下册第8章 记数制度 线上练习</h1>
+    <div class="sub">宽柔中学古来分校｜陈天龙｜J8-2026-S1-001</div>
+    <p class="small">初一下册第8章｜记数制度｜线上练习｜即时反馈</p>
+
+    <label>班级</label>
+    <input id="className" placeholder="请输入班级，例如：初一忠">
+
+    <label>学号</label>
+    <input id="studentNo" inputmode="numeric" placeholder="请输入学号，只能填写数字">
+
+    <label>姓名</label>
+    <input id="studentName" placeholder="请输入姓名">
+
+    <label>座号（可选）</label>
+    <input id="seatNo" inputmode="numeric" placeholder="如老师有要求，请填写座号">
+
+    <button onclick="startPractice()">开始练习</button>
+    <p class="small">每题作答后会立即显示解析，完成后会提交学习数据给老师。</p>
+  </div>
+
+  <div class="card hidden" id="practice">
+    <div class="small" id="progress"></div>
+    <div class="q" id="questionText"></div>
+    <div id="options"></div>
+    <div id="feedback" class="explain hidden"></div>
+    <button id="nextBtn" class="hidden" onclick="goNext()">下一题</button>
+  </div>
+
+  <div class="card hidden" id="finish">
+    <h1>练习完成</h1>
+    <div id="summary"></div>
+    <div class="explain" id="submitStatus">正在提交学习数据……</div>
+  </div>
+</div>
+
+<script>
+const SUBMIT_URL = "https://script.google.com/macros/s/AKfycbxftIDXQRZcwvFSznSsMA60JBeiEzlmGfmPzvJdS_Np6d7_QcsfBOQ500tZTKQU-YG1/exec";
+const SCHOOL_ID = "kchc";
+const SCHOOL_NAME = "宽柔中学古来分校";
+const TEACHER_ID = "chen_tianlong";
+const TEACHER_NAME = "陈天龙";
+const ACADEMIC_YEAR = 2026;
+const SEMESTER = "上学期";
+const PRACTICE_ID = "J8-2026-S1-001";
+const PRACTICE_NAME = "初一下册第8章 记数制度 线上练习";
+const PRACTICE_ROUND = "第1轮";
+const QUIZ_ID = "J8-QUIZ-001";
+const QUIZ_NAME = "初一下册第8章 记数制度 线上练习";
+const CHAPTER_NAME = "初一下册第8章｜记数制度";
+const QUESTIONS = [
+  {id:"Q1",text:"下列关于二进制的说法，正确的是哪一项？",options:{A:"二进制只使用数字0和1",B:"二进制只使用数字1和2",C:"二进制的基数是10",D:"二进制每个位只能写0到7"},answer:"A",knowledge:"二进制的基数与数字",explanation:"二进制的基数是2，只使用0和1。",difficulty:"基础",commonMistake:"把二进制和八进制、十进制混淆。"},
+  {id:"Q2",text:"1101₂ 化为十进制是多少？",options:{A:"11",B:"12",C:"13",D:"14"},answer:"C",knowledge:"二进制转十进制",explanation:"1101₂ = 1×2³ + 1×2² + 0×2¹ + 1×2⁰ = 8+4+1 = 13。",difficulty:"基础",commonMistake:"位值从右往左数错。"},
+  {id:"Q3",text:"25₁₀ 化为二进制是多少？",options:{A:"10101₂",B:"11001₂",C:"10011₂",D:"11100₂"},answer:"B",knowledge:"十进制转二进制",explanation:"25 = 16+8+1，所以25₁₀ = 11001₂。",difficulty:"基础",commonMistake:"连除2后余数顺序写反。"},
+  {id:"Q4",text:"37₁₀ 化为八进制是多少？",options:{A:"43₈",B:"44₈",C:"45₈",D:"46₈"},answer:"C",knowledge:"十进制转八进制",explanation:"37 ÷ 8 = 4 余 5，所以37₁₀ = 45₈。",difficulty:"基础",commonMistake:"把商和余数顺序颠倒。"},
+  {id:"Q5",text:"176₈ 化为十进制是多少？",options:{A:"118",B:"124",C:"126",D:"132"},answer:"C",knowledge:"八进制转十进制",explanation:"176₈ = 1×8² + 7×8¹ + 6×8⁰ = 64+56+6 = 126。",difficulty:"基础",commonMistake:"把八进制误当十进制读成一百七十六。"},
+  {id:"Q6",text:"1011₂ + 1₂ 的结果是多少？",options:{A:"1010₂",B:"1011₂",C:"1100₂",D:"1110₂"},answer:"C",knowledge:"二进制加法",explanation:"1011₂ 是十进制11，加1后为12，12₁₀ = 1100₂。",difficulty:"基础",commonMistake:"忘记二进制“逢二进一”。"},
+  {id:"Q7",text:"八进制数字5对应的三位二进制是？",options:{A:"011₂",B:"100₂",C:"101₂",D:"110₂"},answer:"C",knowledge:"八进制与二进制互化",explanation:"5₈ = 5₁₀ = 101₂。",difficulty:"基础",commonMistake:"三位二进制没有补足或位值写错。"},
+  {id:"Q8",text:"111010₂ 化为八进制是多少？",options:{A:"70₈",B:"72₈",C:"74₈",D:"76₈"},answer:"B",knowledge:"二进制转八进制",explanation:"从右往左每三位一组：111 010，对应7和2，所以是72₈。",difficulty:"中等",commonMistake:"没有从个位开始三位一组。"},
+  {id:"Q9",text:"76₈ + 11₂ 的结果用八进制表示是多少？",options:{A:"77₈",B:"100₈",C:"101₈",D:"102₈"},answer:"C",knowledge:"混合进制运算",explanation:"76₈ = 62₁₀，11₂ = 3₁₀，合计65₁₀；65₁₀ = 101₈。",difficulty:"中等",commonMistake:"不同进制未统一就直接相加。"},
+  {id:"Q10",text:"若一个编码的数值为 2⁴ + 2² + 1，则它的二进制表示是？",options:{A:"10011₂",B:"10100₂",C:"10101₂",D:"11001₂"},answer:"C",knowledge:"位值与二进制表示",explanation:"2⁴ + 2² + 1 = 16+4+1 = 21，对应二进制为10101₂。",difficulty:"挑战",commonMistake:"漏写中间位的0，导致位值不对应。"}
+];
+let current = 0;
+let answers = [];
+let startTime = null;
+let student = {};
+
+function esc(s){return String(s ?? "").replace(/[&<>'"]/g, ch => ({"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#39;","\"":"&quot;"}[ch]));}
+function startPractice(){
+  const className = document.getElementById("className").value.trim();
+  const studentNo = document.getElementById("studentNo").value.trim();
+  const studentName = document.getElementById("studentName").value.trim();
+  const seatNo = document.getElementById("seatNo").value.trim();
+  if(!className){alert("请填写班级。");return;}
+  if(!/^\d{1,20}$/.test(studentNo)){alert("学号只能填写1至20位数字。");return;}
+  if(!studentName){alert("请填写姓名。");return;}
+  if(seatNo && !/^\d{1,20}$/.test(seatNo)){alert("座号只能填写数字。");return;}
+  student = {className, studentNo, studentName, seatNo};
+  startTime = new Date();
+  document.getElementById("home").classList.add("hidden");
+  document.getElementById("practice").classList.remove("hidden");
+  showQuestion();
+}
+function showQuestion(){
+  const q = QUESTIONS[current];
+  document.getElementById("progress").textContent = `第 ${current+1} 题 / 共 ${QUESTIONS.length} 题｜${q.difficulty}`;
+  document.getElementById("questionText").textContent = q.text;
+  document.getElementById("feedback").classList.add("hidden");
+  const nextBtn = document.getElementById("nextBtn");
+  nextBtn.classList.add("hidden");
+  nextBtn.textContent = current === QUESTIONS.length - 1 ? "完成并提交" : "下一题";
+  const box = document.getElementById("options");
+  box.innerHTML = "";
+  Object.keys(q.options).forEach(key => {
+    const btn = document.createElement("button");
+    btn.className = "option";
+    btn.textContent = `${key}. ${q.options[key]}`;
+    btn.onclick = () => chooseAnswer(key, btn);
+    box.appendChild(btn);
+  });
+}
+function chooseAnswer(choice, btn){
+  const q = QUESTIONS[current];
+  const buttons = Array.from(document.querySelectorAll(".option"));
+  buttons.forEach(b => b.disabled = true);
+  btn.classList.add("selected");
+  buttons.forEach(b => {
+    if(b.textContent.startsWith(q.answer + ".")) b.classList.add("correct");
+  });
+  const correct = choice === q.answer;
+  if(!correct) btn.classList.add("wrong");
+  answers[current] = {
+    question_id:q.id,
+    question:q.text,
+    selected:choice,
+    answer:q.answer,
+    correct,
+    knowledge:q.knowledge,
+    difficulty:q.difficulty,
+    commonMistake:q.commonMistake
+  };
+  const fb = document.getElementById("feedback");
+  fb.classList.remove("hidden");
+  fb.innerHTML = `<div class="${correct ? 'ok' : 'warn'}">${correct ? '答对了！' : '答错了。'}</div>
+    <div>正确答案：${q.answer}</div>
+    <div>解析：${esc(q.explanation)}</div>
+    <div>本题知识点：${esc(q.knowledge)}</div>`;
+  document.getElementById("nextBtn").classList.remove("hidden");
+}
+function goNext(){
+  if(current < QUESTIONS.length - 1){
+    current++;
+    showQuestion();
+  }else{
+    finishPractice();
+  }
+}
+function finishPractice(){
+  const scoreCount = answers.filter(a => a && a.correct).length;
+  const total = QUESTIONS.length;
+  const score = Math.round(scoreCount / total * 100);
+  const correctRate = Math.round(scoreCount / total * 100);
+  const wrong = answers.filter(a => a && !a.correct);
+  const weakMap = {};
+  wrong.forEach(a => weakMap[a.knowledge] = (weakMap[a.knowledge] || 0) + 1);
+  const weakKnowledge = Object.keys(weakMap).sort((a,b)=>weakMap[b]-weakMap[a]);
+  const timeSpentSec = startTime ? Math.max(1, Math.round((new Date()-startTime)/1000)) : "";
+  const learningSummary = wrong.length === 0 ? "本次练习全部答对，基础掌握良好。建议继续保持，并尝试更综合的进制转换题。" : `本次主要薄弱点在：${weakKnowledge.join("、")}。建议先复习位值、展开式与进制互化步骤，再进行同类题巩固。`;
+  const wrongHtml = wrong.length === 0 ? "无" : wrong.map(a => `${a.question_id}：${esc(a.question)}｜你的答案：${a.selected}｜正确答案：${a.answer}｜知识点：${esc(a.knowledge)}`).join("<br>");
+  document.getElementById("practice").classList.add("hidden");
+  document.getElementById("finish").classList.remove("hidden");
+  document.getElementById("summary").innerHTML = `
+    <div class="row"><b>学校：</b>${esc(SCHOOL_NAME)}</div>
+    <div class="row"><b>老师：</b>${esc(TEACHER_NAME)}</div>
+    <div class="row"><b>练习名称：</b>${esc(PRACTICE_NAME)}</div>
+    <div class="row"><b>章节：</b>${esc(CHAPTER_NAME)}</div>
+    <div class="row"><b>班级：</b>${esc(student.className)}</div>
+    <div class="row"><b>学号：</b>${esc(student.studentNo)}</div>
+    <div class="row"><b>姓名：</b>${esc(student.studentName)}</div>
+    <div class="row"><b>座号：</b>${esc(student.seatNo || "未填写")}</div>
+    <div class="row result"><b>得分：</b>${score}分（${scoreCount}/${total}）</div>
+    <div class="row"><b>正确率：</b>${correctRate}%</div>
+    <div class="row"><b>错题记录：</b><br>${wrongHtml}</div>
+    <div class="row"><b>薄弱知识点：</b>${weakKnowledge.length ? weakKnowledge.map(k=>`<span class="tag">${esc(k)}</span>`).join(" ") : "无明显薄弱点"}</div>
+    <div class="row"><b>学习总结：</b>${esc(learningSummary)}</div>
+    <div class="row"><b>提交状态：</b><span id="statusText">正在提交学习数据……</span></div>`;
+  const payload = {
+    school_id:SCHOOL_ID,
+    school_name:SCHOOL_NAME,
+    teacher_id:TEACHER_ID,
+    teacher_name:TEACHER_NAME,
+    academic_year:ACADEMIC_YEAR,
+    semester:SEMESTER,
+    class_name:student.className,
+    student_no:student.studentNo,
+    student_name:student.studentName,
+    seat_no:student.seatNo,
+    practice_id:PRACTICE_ID,
+    practice_name:PRACTICE_NAME,
+    practice_round:PRACTICE_ROUND,
+    quiz_id:QUIZ_ID,
+    quiz_name:QUIZ_NAME,
+    chapter_name:CHAPTER_NAME,
+    mode:"练习模式",
+    question_count:total,
+    correct_count:scoreCount,
+    score:score,
+    correct_rate:correctRate,
+    wrong_records:wrong.map(a => `${a.question_id}:${a.selected}->${a.answer}`).join("; "),
+    weak_knowledge:weakKnowledge.join("、"),
+    learning_summary:learningSummary,
+    answers:answers,
+    time_spent_sec:timeSpentSec,
+    submitted_at:new Date().toISOString(),
+    user_agent:navigator.userAgent
+  };
+  submitPayload(payload);
+}
+function submitPayload(payload){
+  fetch(SUBMIT_URL, {
+    method:"POST",
+    mode:"no-cors",
+    headers:{"Content-Type":"text/plain;charset=utf-8"},
+    body:JSON.stringify(payload)
+  }).then(() => {
+    document.getElementById("submitStatus").innerHTML = "<span class='ok'>已提交。老师稍后可查看学习数据。</span>";
+    document.getElementById("statusText").textContent = "已提交。老师稍后可查看学习数据。";
+  }).catch(() => {
+    document.getElementById("submitStatus").innerHTML = "<span class='warn'>提交失败，请截图给老师。</span>";
+    document.getElementById("statusText").textContent = "提交失败，请截图给老师。";
+  });
+}
+</script>
+</body>
+</html>
