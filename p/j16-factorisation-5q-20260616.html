@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>因式分解5题基础练习</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans SC","Microsoft YaHei",Arial,sans-serif;background:#f4f7fb;color:#1f2937}.wrap{max-width:760px;margin:0 auto;padding:18px}.card{background:#fff;border-radius:18px;padding:22px;box-shadow:0 8px 24px rgba(15,23,42,.08);margin:16px 0}.title{font-size:24px;font-weight:800;margin:0 0 8px;color:#0f172a}.muted{color:#64748b;line-height:1.7}.meta{background:#eef6ff;border-left:5px solid #2563eb;padding:12px 14px;border-radius:12px;margin:14px 0;line-height:1.8}.field{margin:14px 0}label{display:block;font-weight:700;margin-bottom:7px}input{width:100%;font-size:16px;padding:12px;border:1px solid #cbd5e1;border-radius:12px;background:#fff}button{border:0;border-radius:14px;padding:13px 16px;font-size:16px;font-weight:800;cursor:pointer}.primary{width:100%;background:#2563eb;color:#fff;margin-top:12px}.option{width:100%;text-align:left;background:#f8fafc;color:#111827;border:1px solid #dbe3ef;margin:8px 0}.option:disabled{cursor:not-allowed;opacity:.92}.correct{background:#dcfce7!important;border-color:#22c55e!important}.wrong{background:#fee2e2!important;border-color:#ef4444!important}.feedback{margin-top:14px;padding:13px;border-radius:12px;line-height:1.7}.fb-ok{background:#ecfdf5;border:1px solid #22c55e}.fb-bad{background:#fff1f2;border:1px solid #fb7185}.hidden{display:none}.progress{font-weight:800;color:#2563eb;margin-bottom:10px}.qtext{font-size:19px;font-weight:800;line-height:1.6;margin:12px 0}.summary-line{padding:8px 0;border-bottom:1px solid #e5e7eb;line-height:1.7}.pill{display:inline-block;background:#eef2ff;color:#3730a3;border-radius:999px;padding:4px 10px;margin:3px;font-size:13px}.status{margin-top:12px;padding:12px;border-radius:12px;background:#fefce8;border:1px solid #facc15;line-height:1.7}.small{font-size:13px;color:#64748b;line-height:1.6}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <section id="startPage" class="card">
+    <h1 class="title">因式分解5题基础练习</h1>
+    <div class="meta">
+      学校：宽柔中学古来分校<br>
+      老师：陈天龙<br>
+      学年学期：2026 上学期<br>
+      章节：初二上册第2章｜因式分解<br>
+      模式：练习模式（每题作答后显示反馈）
+    </div>
+    <p class="muted">请先填写资料。完成后请截图完成页给老师备查。</p>
+    <div class="field"><label for="className">班级（必填）</label><input id="className" placeholder="例如：初二仁"></div>
+    <div class="field"><label for="studentNo">学号（必填）</label><input id="studentNo" placeholder="只可输入英文、数字或 -"></div>
+    <div class="field"><label for="studentName">姓名（必填）</label><input id="studentName" placeholder="请输入姓名"></div>
+    <div class="field"><label for="seatNo">座号（可选）</label><input id="seatNo" placeholder="可不填"></div>
+    <button class="primary" onclick="startQuiz()">开始练习</button>
+    <p class="small">本练习只收集班级、学号、姓名、座号与作答数据。</p>
+  </section>
+
+  <section id="quizPage" class="card hidden">
+    <div id="progress" class="progress"></div>
+    <div id="qText" class="qtext"></div>
+    <div id="options"></div>
+    <div id="feedback" class="feedback hidden"></div>
+    <button id="nextBtn" class="primary hidden" onclick="nextQuestion()">下一题</button>
+  </section>
+
+  <section id="finishPage" class="card hidden">
+    <h2 class="title">完成页</h2>
+    <div id="finishInfo"></div>
+    <div id="submitStatus" class="status">正在发送作答数据……</div>
+    <p class="small">若老师稍后未看到数据，请截图本页给老师。</p>
+  </section>
+</div>
+
+<script>
+const SUBMIT_URL = "https://script.google.com/macros/s/AKfycbxftIDXQRZcwvFSznSsMA60JBeiEzlmGfmPzvJdS_Np6d7_QcsfBOQ500tZTKQU-YG1/exec";
+const CONFIG = {
+  school_id:"kchc",
+  school_name:"宽柔中学古来分校",
+  teacher_id:"chen_tianlong",
+  teacher_name:"陈天龙",
+  academic_year:2026,
+  semester:"上学期",
+  practice_id:"J16_PRACTICE_20260616_5Q",
+  practice_name:"因式分解5题基础练习",
+  practice_round:1,
+  quiz_id:"J16_QUIZ_20260616_5Q_A",
+  quiz_name:"因式分解5题基础练习",
+  chapter_name:"初二上册第2章｜因式分解"
+};
+const questions = [
+  {question_id:"J16_Q001",question_text:"下列哪一个是 6x+9 的正确因式分解？",options:{A:"3(2x+3)",B:"6(x+9)",C:"9(x+6)",D:"3(6x+9)"},answer:"A",explanation:"6x 与 9 的公因数是 3，提出 3 后得到 3(2x+3)。",knowledge_tag:"提公因式",difficulty:"基础"},
+  {question_id:"J16_Q002",question_text:"x²−25 可分解为：",options:{A:"(x−5)²",B:"(x+5)(x−5)",C:"(x+25)(x−1)",D:"x(x−25)"},answer:"B",explanation:"x²−25 是平方差，等于 x²−5²，所以分解为 (x+5)(x−5)。",knowledge_tag:"平方差公式",difficulty:"基础"},
+  {question_id:"J16_Q003",question_text:"a²+6a+9 的因式分解是：",options:{A:"(a+6)(a+3)",B:"(a−3)²",C:"(a+3)²",D:"(a+9)(a+1)"},answer:"C",explanation:"a²+6a+9 = a²+2·a·3+3²，是完全平方公式，所以为 (a+3)²。",knowledge_tag:"完全平方公式",difficulty:"基础"},
+  {question_id:"J16_Q004",question_text:"将 xy+3x+2y+6 因式分解，正确的是：",options:{A:"(x+2)(y+3)",B:"(x+3)(y+2)",C:"(x+y)(3+2)",D:"(x+6)(y+1)"},answer:"B",explanation:"分组：xy+3x+2y+6 = x(y+3)+2(y+3) = (x+2)(y+3)。再检查选项，A 展开为 xy+3x+2y+6，因此正确答案为 A。",knowledge_tag:"分组分解",difficulty:"中等",answerOverride:"A"},
+  {question_id:"J16_Q005",question_text:"x²−5x+6 可分解为：",options:{A:"(x+2)(x+3)",B:"(x−1)(x−6)",C:"(x+1)(x−6)",D:"(x−2)(x−3)"},answer:"D",explanation:"找两个数，它们的和为 -5，积为 6，即 -2 与 -3，所以为 (x−2)(x−3)。",knowledge_tag:"交叉相乘法",difficulty:"挑战"}
+];
+questions.forEach(q=>{ if(q.answerOverride){ q.answer=q.answerOverride; delete q.answerOverride; } });
+let student = {};
+let order = [];
+let currentIndex = 0;
+let answers = [];
+let startTime = 0;
+function shuffle(arr){const a=[...arr];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function cleanText(v){return String(v||"").trim();}
+function startQuiz(){
+  const class_name=cleanText(document.getElementById("className").value);
+  const student_no=cleanText(document.getElementById("studentNo").value);
+  const student_name=cleanText(document.getElementById("studentName").value);
+  const seat_no=cleanText(document.getElementById("seatNo").value);
+  if(!class_name){alert("请填写班级。 ");return;}
+  if(!/^[A-Za-z0-9\-]{1,30}$/.test(student_no)){alert("请填写正确学号：只可输入英文、数字或 -。 ");return;}
+  if(!student_name){alert("请填写姓名。 ");return;}
+  student={class_name, class_id:class_name, student_no, student_name, seat_no};
+  order=shuffle(questions);
+  currentIndex=0;answers=[];startTime=Date.now();
+  document.getElementById("startPage").classList.add("hidden");
+  document.getElementById("quizPage").classList.remove("hidden");
+  renderQuestion();
+}
+function renderQuestion(){
+  const q=order[currentIndex];
+  document.getElementById("progress").textContent=`第 ${currentIndex+1} 题 / 共 ${order.length} 题`;
+  document.getElementById("qText").textContent=q.question_text;
+  const box=document.getElementById("options");
+  box.innerHTML="";
+  ["A","B","C","D"].forEach(k=>{
+    const btn=document.createElement("button");
+    btn.className="option";
+    btn.textContent=`${k}. ${q.options[k]}`;
+    btn.onclick=()=>chooseAnswer(k,btn);
+    box.appendChild(btn);
+  });
+  document.getElementById("feedback").className="feedback hidden";
+  document.getElementById("feedback").innerHTML="";
+  document.getElementById("nextBtn").classList.add("hidden");
+  document.getElementById("nextBtn").textContent=(currentIndex===order.length-1)?"完成并提交":"下一题";
+}
+function chooseAnswer(selected, btn){
+  const q=order[currentIndex];
+  const isCorrect=selected===q.answer;
+  document.querySelectorAll(".option").forEach(b=>{b.disabled=true; if(b.textContent.startsWith(q.answer+".")){b.classList.add("correct");}});
+  if(!isCorrect){btn.classList.add("wrong");}
+  answers.push({
+    question_id:q.question_id,
+    display_order:currentIndex+1,
+    question_text:q.question_text,
+    selected_answer:selected,
+    correct_answer:q.answer,
+    is_correct:isCorrect,
+    knowledge_tag:q.knowledge_tag,
+    difficulty:q.difficulty
+  });
+  const fb=document.getElementById("feedback");
+  fb.className="feedback "+(isCorrect?"fb-ok":"fb-bad");
+  fb.innerHTML=`<strong>${isCorrect?"回答正确":"回答错误"}</strong><br>正确答案：${q.answer}<br>解析：${q.explanation}<br>本题知识点：${q.knowledge_tag}`;
+  document.getElementById("nextBtn").classList.remove("hidden");
+}
+function nextQuestion(){
+  if(currentIndex<order.length-1){currentIndex++;renderQuestion();}else{finishQuiz();}
+}
+function finishQuiz(){
+  document.getElementById("quizPage").classList.add("hidden");
+  document.getElementById("finishPage").classList.remove("hidden");
+  const total_questions=questions.length;
+  const correctCount=answers.filter(a=>a.is_correct).length;
+  const score=Math.round(correctCount/total_questions*100);
+  const accuracy=Math.round(correctCount/total_questions*100);
+  const time_used=Math.max(1,Math.round((Date.now()-startTime)/1000));
+  const wrong_question_ids=answers.filter(a=>!a.is_correct).map(a=>a.question_id);
+  const weak_knowledge_tags=[...new Set(answers.filter(a=>!a.is_correct).map(a=>a.knowledge_tag))];
+  const correct_json={}; answers.forEach(a=>correct_json[a.question_id]=a.is_correct);
+  const wrongText=wrong_question_ids.length?wrong_question_ids.join("、"):"无";
+  const weakText=weak_knowledge_tags.length?weak_knowledge_tags.join("、"):"暂无明显薄弱点";
+  const summary=accuracy>=80?"整体掌握较好，请继续保持并注意检查符号。":accuracy>=60?"基础已有掌握，建议重点复习错题对应知识点。":"建议回到提公因式、公式法与交叉相乘法的基本步骤重新练习。";
+  document.getElementById("finishInfo").innerHTML=`
+    <div class="summary-line">学校：${CONFIG.school_name}</div>
+    <div class="summary-line">老师：${CONFIG.teacher_name}</div>
+    <div class="summary-line">练习名称：${CONFIG.practice_name}</div>
+    <div class="summary-line">章节：${CONFIG.chapter_name}</div>
+    <div class="summary-line">班级：${student.class_name}</div>
+    <div class="summary-line">学号：${student.student_no}</div>
+    <div class="summary-line">姓名：${student.student_name}</div>
+    <div class="summary-line">座号：${student.seat_no||"未填"}</div>
+    <div class="summary-line">得分：${score}</div>
+    <div class="summary-line">正确率：${accuracy}%</div>
+    <div class="summary-line">错题记录：${wrongText}</div>
+    <div class="summary-line">薄弱知识点：${weakText}</div>
+    <div class="summary-line">学习总结：${summary}</div>
+    <div class="summary-line">提交状态：<span id="statusInline">正在发送作答数据……</span></div>`;
+  const payload={
+    action:"submit_response",
+    school_id:CONFIG.school_id,
+    school_name:CONFIG.school_name,
+    teacher_id:CONFIG.teacher_id,
+    teacher_name:CONFIG.teacher_name,
+    academic_year:CONFIG.academic_year,
+    semester:CONFIG.semester,
+    class_id:student.class_id,
+    class_name:student.class_name,
+    student_no:student.student_no,
+    student_name:student.student_name,
+    seat_no:student.seat_no,
+    practice_id:CONFIG.practice_id,
+    practice_name:CONFIG.practice_name,
+    practice_round:CONFIG.practice_round,
+    quiz_id:CONFIG.quiz_id,
+    quiz_name:CONFIG.quiz_name,
+    chapter_name:CONFIG.chapter_name,
+    score:score,
+    accuracy:accuracy,
+    total_questions:total_questions,
+    time_used:time_used,
+    answers_json:answers,
+    correct_json:correct_json,
+    wrong_question_ids:wrong_question_ids,
+    weak_knowledge_tags:weak_knowledge_tags,
+    abnormal_flag:"none"
+  };
+  submitPayload(payload);
+}
+function submitPayload(payload){
+  fetch(SUBMIT_URL,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(payload)})
+    .then(()=>{document.getElementById("submitStatus").textContent="已发送。若老师稍后未看到数据，请截图给老师。";document.getElementById("statusInline").textContent="已发送。若老师稍后未看到数据，请截图给老师。";})
+    .catch(()=>{document.getElementById("submitStatus").textContent="提交失败，请截图给老师。";document.getElementById("statusInline").textContent="提交失败，请截图给老师。";});
+}
+</script>
+</body>
+</html>
