@@ -1,0 +1,293 @@
+
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>几何的基本概念图形练习</title>
+  <style>
+    *{box-sizing:border-box}
+    :root{
+      --ink:#2c2118;--muted:#7b6756;--brown:#5a351e;--navy:#17406f;
+      --gold:#ffb000;--orange:#ff8a1f;--green:#35b983;--blue:#61b5f7;
+      --red:#f47668;--purple:#9b7cf7;--line:rgba(125,89,53,.14);
+      --shadow:0 18px 46px rgba(111,62,22,.15);
+      --hand:"Comic Sans MS","Segoe Print","KaiTi","Microsoft YaHei",Arial,sans-serif;
+    }
+    html{font-size:18px}
+    body{margin:0;min-height:100vh;font-family:"Microsoft YaHei",Arial,sans-serif;color:var(--ink);background:radial-gradient(circle at 12% 8%,rgba(255,211,106,.62),transparent 26%),radial-gradient(circle at 90% 12%,rgba(97,181,247,.24),transparent 30%),radial-gradient(circle at 86% 78%,rgba(53,185,131,.18),transparent 32%),linear-gradient(150deg,#fff7e8 0%,#ffe1c2 48%,#f8d0a1 100%)}
+    .page{max-width:760px;margin:0 auto;padding:16px 10px 30px}
+    .card{margin-bottom:18px;overflow:hidden;border-radius:28px;background:rgba(255,253,248,.94);border:1px solid rgba(255,255,255,.66);box-shadow:var(--shadow)}
+    .topband{padding:28px 16px 24px;text-align:center;background:linear-gradient(135deg,#fff0d8,#ffe2ae 48%,#dff4ff);border-bottom:1px solid rgba(126,82,36,.12)}
+    h1{margin:0;color:var(--navy);font-family:var(--hand);font-size:1.9rem;line-height:1.24;letter-spacing:.02em;text-shadow:0 3px 0 rgba(255,255,255,.8),0 8px 18px rgba(23,64,111,.14)}
+    .hero h1{font-size:2.16rem}
+    h2{margin:0 0 12px;font-size:1.12rem}
+    .pill{display:inline-block;margin-top:12px;padding:10px 16px;border-radius:999px;background:rgba(255,255,255,.68);border:1px solid rgba(255,255,255,.7);color:#6e401e;font-weight:900;line-height:1.4}
+    .sub{margin:13px 0 0;color:var(--muted);line-height:1.7;text-align:center}
+    .body{padding:17px 16px 20px}
+    label{display:block;margin:14px 0 8px;font-weight:900;color:#2b2119}
+    input{width:100%;min-height:56px;border:2px solid #ead7bf;border-radius:18px;padding:0 15px;font-size:1rem;background:#fffefa;outline:none}
+    input:focus{border-color:#e69b43;box-shadow:0 0 0 4px rgba(244,155,51,.16)}
+    button{width:100%;min-height:58px;margin-top:18px;border:0;border-radius:18px;color:#fff;font-size:1.05rem;font-weight:900;background:linear-gradient(135deg,#f5aa41,#e8782c 60%,#b45825);box-shadow:0 12px 26px rgba(199,91,30,.22);cursor:pointer}
+    button:disabled{opacity:.55;box-shadow:none}
+    .hidden{display:none}
+    .progressBox{position:sticky;top:0;z-index:4;margin:-17px -16px 18px;padding:14px 16px 12px;background:rgba(255,253,248,.94);border-bottom:1px solid var(--line);backdrop-filter:blur(8px)}
+    .progressMeta{display:flex;justify-content:space-between;gap:10px;color:var(--brown);font-weight:900}
+    .bar{height:10px;margin-top:10px;border-radius:999px;background:#f1dec6;overflow:hidden}
+    .bar span{display:block;height:100%;width:0;background:linear-gradient(90deg,#ffd36a,#f59f3a,#35b983);transition:.25s}
+    .tagrow{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:13px}
+    .tag{padding:7px 10px;border-radius:999px;font-size:.82rem;font-weight:900;background:#fff0c9;color:#6d4b13}
+    .tag.blue{background:#e5f4ff;color:#24567c}
+    .qTitle{font-size:1.15rem;line-height:1.55;font-weight:900;margin:0 0 14px}
+    .diagram{display:none;margin:12px 0 8px;padding:14px 10px;border-radius:8px;background:#fff;border:1.5px solid #4b5563;text-align:center;overflow:hidden;color-scheme:light;forced-color-adjust:none}
+    .diagram svg{display:block;width:100%;max-width:620px;max-height:420px;height:auto;margin:0 auto}
+    .diagram svg text{font-family:"Microsoft YaHei",Arial,sans-serif;fill:#1f2937;letter-spacing:0}
+    .diagramNote{margin:0 0 16px;text-align:center;color:#66584c}
+    .small{font-size:.9rem;color:var(--muted);line-height:1.65}
+    .option{width:100%;margin:10px 0;padding:14px;border:2px solid #eddac1;border-radius:18px;background:linear-gradient(135deg,#fffefa,#fff8ed);font-weight:900;line-height:1.5;text-align:left;color:var(--ink)}
+    .option.correct{border-color:#2e9b74;background:linear-gradient(135deg,#dff8ea,#bdebd7);color:#14533f}
+    .option.wrong{border-color:#df6657;background:linear-gradient(135deg,#ffe5df,#ffc9bd);color:#842a20}
+    .feedback{display:none;margin-top:14px;padding:14px;border-radius:18px;line-height:1.75;background:linear-gradient(135deg,#fff3ef,#fffaf1);border:1px solid rgba(244,118,104,.22);color:#563323}
+    .feedback.ok{display:block;background:linear-gradient(135deg,#e6fbef,#f7fff9);border-color:rgba(53,185,131,.25);color:#14533f}
+    .feedback.bad{display:block}
+    .feedbackTitle{font-weight:900;color:#a83a2f;margin-bottom:6px}
+    .feedback.ok .feedbackTitle{color:#14533f}
+    .fbLine{margin-top:5px}
+    .fbLabel{display:inline-flex;min-width:76px;justify-content:center;margin-right:6px;padding:4px 8px;border-radius:999px;color:#fff;font-size:.86rem;font-weight:900;background:#f47668}
+    .fbLabel.ok{background:#35b983}.fbLabel.blue{background:#61b5f7}
+    .hero{padding:28px 16px 25px;text-align:center;background:linear-gradient(135deg,#eaf5ff,#ffd16d 56%,#ffb26b);border-bottom:1px solid rgba(126,82,36,.12)}
+    .stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px;margin-top:-30px;position:relative}
+    .stat{min-height:106px;padding:16px 12px;border-radius:24px;border:2px solid rgba(255,255,255,.82);box-shadow:0 15px 30px rgba(78,46,20,.13);text-align:center;position:relative;overflow:hidden}
+    .stat:after{content:"";position:absolute;right:-28px;top:-28px;width:82px;height:82px;border-radius:50%;background:rgba(255,255,255,.34)}
+    .stat b{display:block;font-size:1.62rem;line-height:1.1;position:relative}
+    .stat span{display:block;margin-top:10px;color:#4d3f35;font-weight:900;position:relative}
+    .score{background:linear-gradient(145deg,#fff4cf 0%,#ffd36a 100%)}
+    .rate{background:linear-gradient(145deg,#e8f7ff 0%,#9bd8ff 100%)}
+    .wrongStat{background:linear-gradient(145deg,#fff0ee 0%,#ffb6aa 100%)}
+    .sent{background:linear-gradient(145deg,#e5fff0 0%,#91e6bd 100%)}
+    .section{margin-top:15px;padding:15px;border-radius:23px;border:1px solid var(--line);background:rgba(255,255,255,.66)}
+    .infoGrid{display:grid;grid-template-columns:86px 1fr;gap:9px 10px;line-height:1.55}
+    .label,.miniTitle{display:inline-flex;align-items:center;justify-content:center;min-height:30px;border-radius:999px;color:#fff;font-size:.88rem;font-weight:900}
+    .miniTitle{width:max-content;max-width:100%;padding:5px 11px;margin:12px 0 6px}
+    .miniTitle:first-child{margin-top:0}
+    .adviceBlock{display:block;margin-bottom:8px}
+    .c1{background:#f59f3a}.c2{background:#61b5f7}.c3{background:#35b983}.c4{background:#9b7cf7}.c5{background:#f47668}.c6{background:#8b6f47}
+    .value{min-height:30px;padding:3px 0 0 2px;font-weight:800;border-bottom:1px dashed rgba(122,91,60,.18)}
+    .timeGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+    .timeLine{display:flex;align-items:center;gap:8px;padding:10px;border-radius:17px;background:linear-gradient(145deg,#fffaf2,#fff);border:1px solid var(--line)}
+    .timeLine .label{flex:0 0 auto;padding:5px 10px;min-height:28px}
+    .timeLine .value{border:0;padding:0;font-size:.94rem}
+    .wrongItem{margin:10px 0;padding:14px;border-radius:19px;background:linear-gradient(145deg,#fff8f5,#fff);border:1px solid rgba(244,118,104,.18);line-height:1.75}
+    .wrongItem b{color:#9b3329}
+    .mini{display:block;margin-top:6px;color:#6f5a49}
+    .analysisBox{padding:15px;border-radius:20px;line-height:1.78;background:linear-gradient(135deg,#e9fff4,#e7f5ff 58%,#f3efff);border:1px solid rgba(97,181,247,.18)}
+    .warm{margin-top:12px;padding:13px 14px;border-radius:18px;background:linear-gradient(135deg,#fff7d6,#ffe9ba);border:1px solid rgba(255,176,0,.22);color:#6c4315;font-weight:800;line-height:1.7}
+    .notice{margin-top:15px;padding:14px;border-radius:20px;color:#0d513a;background:linear-gradient(135deg,#dcfce7,#e3f8ff);border:1px solid rgba(53,185,131,.22);font-weight:800;line-height:1.65}
+    @media(max-width:520px){
+      html{font-size:17px}.page{padding:12px 9px 24px}.body{padding:14px}
+      h1{font-size:1.6rem;line-height:1.3;word-break:keep-all}
+      .hero h1{font-size:1.86rem;line-height:1.24}
+      .pill{font-size:.92rem;padding:9px 13px}
+      .stat{min-height:98px}.stat b{font-size:1.46rem}.infoGrid{grid-template-columns:78px 1fr}
+      .timeLine{padding:9px 8px}.timeLine .value{font-size:.9rem}
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section id="home" class="card">
+      <div class="topband">
+        <h1>初一下册｜第12章｜几何的基本概念</h1>
+        <div class="pill">线上练习｜J12-01｜未指定｜共1题</div>
+        <p class="sub">请填写资料后开始作答。系统会记录正确题数、正确率、错题、用时与薄弱知识点。</p>
+      </div>
+      <div class="body">
+        <label for="className">班级</label><input id="className" value="未指定" autocomplete="off" placeholder="请输入班级">
+        <label for="studentNo">学号</label><input id="studentNo" inputmode="numeric" autocomplete="off" placeholder="请输入学号">
+        <label for="studentName">姓名</label><input id="studentName" autocomplete="off" placeholder="请输入姓名">
+        <label for="seatNo">座号（可不填）</label><input id="seatNo" inputmode="numeric" autocomplete="off" placeholder="请输入座号">
+        <button id="startBtn">开始练习</button>
+      </div>
+    </section>
+
+    <section id="quiz" class="card hidden">
+      <div class="progressBox">
+        <div class="progressMeta"><div id="progressText">第1题 / 共1题</div><div id="scoreText">答对 0 题</div></div>
+        <div class="bar"><span id="barFill"></span></div>
+      </div>
+      <div class="body">
+        <div class="tagrow"><span class="tag" id="difficulty"></span><span class="tag blue" id="knowledge"></span></div>
+        <div class="qTitle" id="questionText"></div>
+        <div class="diagram" id="diagram"></div>
+        <div id="diagramNote" class="small diagramNote hidden"></div>
+        <div id="options"></div>
+        <div class="feedback" id="feedback"></div>
+        <button id="nextBtn" disabled>下一题</button>
+      </div>
+    </section>
+
+    <section id="finish" class="card hidden">
+      <div class="hero">
+        <h1>练习完成</h1>
+        <div class="pill">线上练习｜J12-01｜未指定<br>几何的基本概念图形练习</div>
+      </div>
+      <div class="body">
+        <div class="stats">
+          <div class="stat score"><b id="finalScore">0/1</b><span>答对题数</span></div>
+          <div class="stat rate"><b id="finalRate">0%</b><span>正确率</span></div>
+          <div class="stat wrongStat"><b id="finalWrong">0题</b><span>错题数</span></div>
+          <div class="stat sent"><b id="submitState">送达中…</b><span>提交状态</span></div>
+        </div>
+
+        <div class="section">
+          <h2>学生资料</h2>
+          <div class="infoGrid">
+            <div class="label c1">学校</div><div class="value" id="infoSchool"></div>
+            <div class="label c2">老师</div><div class="value" id="infoTeacher"></div>
+            <div class="label c3">班级</div><div class="value" id="infoClass"></div>
+            <div class="label c4">姓名</div><div class="value" id="infoStudent"></div>
+            <div class="label c5">座号</div><div class="value" id="infoSeat"></div>
+            <div class="label c6">章节</div><div class="value" id="infoChapter"></div>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>用时记录</h2>
+          <div class="timeGrid">
+            <div class="timeLine"><div class="label c1">开始</div><div class="value" id="startedAtDisplay"></div></div>
+            <div class="timeLine"><div class="label c2">完成</div><div class="value" id="completedAtDisplay"></div></div>
+            <div class="timeLine"><div class="label c3">总用时</div><div class="value" id="timeUsedDisplay"></div></div>
+            <div class="timeLine"><div class="label c4">平均</div><div class="value" id="avgTimeDisplay"></div></div>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>错题分析</h2>
+          <div id="wrongAnalysis"></div>
+        </div>
+
+        <div class="section">
+          <h2>整体建议</h2>
+          <div class="analysisBox" id="overallAnalysis"></div>
+          <div class="warm" id="warmEncouragement"></div>
+        </div>
+
+        <div class="notice" id="submitNotice"><div>提交状态：送达中…</div></div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const SUBMIT_URL="https://script.google.com/macros/s/AKfycbxftIDXQRZcwvFSznSsMA60JBeiEzlmGfmPzvJdS_Np6d7_QcsfBOQ500tZTKQU-YG1/exec";
+    const META={
+      school_id:"kds",school_name:"关丹德信中学",
+      teacher_id:"chen_tianlong",teacher_name:"陈天龙",
+      academic_year:"2026",semester:"上学期",
+      class_id:"",class_name:"未指定",
+      practice_id:"J12-01",practice_name:"几何的基本概念图形练习",
+      practice_round:"1",quiz_id:"J12-01-Q1",
+      quiz_name:"几何的基本概念图形练习",chapter_name:"初一下册｜第12章｜几何的基本概念"
+    };
+    const QUESTIONS=[{"id":"Q1","difficulty":"易","knowledge":"垂直的概念","text":"如图，直线 l 与直线 m 相交于点 O。若图中标出的角 ∠AOB=90°，则直线 l 与直线 m 的关系是？","options":["平行","垂直","重合","无法判断"],"answer":"B","explanation":"两条直线相交形成直角时，这两条直线互相垂直。题图已给出 ∠AOB=90°，所以直线 l⊥m。","common_misconception":"只看到两线相交，忽略 90° 是判断垂直的关键条件。","coach_tip":"看到 90° 或直角标记时，先联想到垂直关系。","image_required":true,"diagram_type":"geometry","diagram_svg":"<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 360 240\" role=\"img\" aria-label=\"两条直线l和m相交于O，角AOB为90度\"><rect width=\"360\" height=\"240\" fill=\"#ffffff\"/><line x1=\"45\" y1=\"120\" x2=\"315\" y2=\"120\" stroke=\"#1f2937\" stroke-width=\"4\"/><line x1=\"180\" y1=\"215\" x2=\"180\" y2=\"25\" stroke=\"#1f2937\" stroke-width=\"4\"/><circle cx=\"180\" cy=\"120\" r=\"4\" fill=\"#1f2937\"/><path d=\"M180 120 L210 120 L210 90 L180 90 Z\" fill=\"none\" stroke=\"#ef4444\" stroke-width=\"3\"/><text x=\"318\" y=\"114\" font-size=\"18\">l</text><text x=\"190\" y=\"32\" font-size=\"18\">m</text><text x=\"222\" y=\"95\" font-size=\"18\">90°</text><text x=\"154\" y=\"116\" font-size=\"18\">O</text><text x=\"272\" y=\"143\" font-size=\"18\">A</text><text x=\"190\" y=\"62\" font-size=\"18\">B</text></svg>","diagram_note":"图中直线 l 与直线 m 相交于 O，∠AOB=90°。","diagram_alt":"直线l为水平线，直线m为竖直线，两线交于O，OA在直线l上，OB在直线m上，角AOB标为90度。"}];
+    let order=[],index=0,score=0,startTime=0,submitted=false,answers=[];
+    const $=id=>document.getElementById(id);
+    const esc=text=>String(text??"").replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[ch]));
+    function shuffle(items){const arr=items.slice();for(let i=arr.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]]}return arr}
+    function show(id){["home","quiz","finish"].forEach(x=>$(x).classList.add("hidden"));$(id).classList.remove("hidden");window.scrollTo({top:0,behavior:"smooth"})}
+    window.addEventListener("beforeunload",e=>{if(startTime>0&&!submitted){e.preventDefault();e.returnValue="刷新或离开后，本次作答可能无法继续，请确认是否离开。"}});
+    $("startBtn").addEventListener("click",()=>{const classValue=$("className").value.trim(),studentNoValue=$("studentNo").value.trim(),studentNameValue=$("studentName").value.trim();if(!classValue||!studentNoValue||!studentNameValue){alert("请先填写班级、学号、姓名。");return}if(/^\d+$/.test(studentNameValue)){alert("姓名不能只填数字，请填写真实姓名。");return}order=shuffle(QUESTIONS);index=0;score=0;answers=[];startTime=Date.now();submitted=false;show("quiz");renderQuestion()});
+    function renderQuestion(){
+      const q=order[index];
+      $("progressText").textContent=`第${index+1}题 / 共${order.length}题`;
+      $("scoreText").textContent=`答对 ${score} 题`;
+      $("barFill").style.width=`${index/order.length*100}%`;
+      $("difficulty").textContent=`难度：${q.difficulty||""}`;
+      $("knowledge").textContent=`知识点：${q.knowledge||""}`;
+      $("questionText").textContent=q.text;
+      const hasDiagram=q.image_required===true&&typeof q.diagram_svg==="string"&&q.diagram_svg.trim().startsWith("<svg");
+      if(hasDiagram){$("diagram").style.display="block";$("diagram").innerHTML=q.diagram_svg;const svg=$("diagram").querySelector("svg");if(svg&&!svg.querySelector("[data-exam-bg]")){const bg=document.createElementNS("http://www.w3.org/2000/svg","rect");bg.setAttribute("x","0");bg.setAttribute("y","0");bg.setAttribute("width","100%");bg.setAttribute("height","100%");bg.setAttribute("fill","#fff");bg.setAttribute("data-exam-bg","true");svg.insertBefore(bg,svg.firstChild)}$("diagram").setAttribute("role","img");$("diagram").setAttribute("aria-label",q.diagram_alt||"本题数学图形")}else{$("diagram").style.display="none";$("diagram").innerHTML="";$("diagram").removeAttribute("role");$("diagram").removeAttribute("aria-label")}
+      const diagramNote=q.diagram_note||"";$("diagramNote").textContent=hasDiagram?diagramNote:"";$("diagramNote").classList.toggle("hidden",!hasDiagram||!diagramNote);
+      $("feedback").className="feedback";$("feedback").innerHTML="";$("nextBtn").disabled=true;$("nextBtn").textContent=index===order.length-1?"完成并提交":"下一题";$("options").innerHTML="";
+      Object.entries(q.options).forEach(([key,value])=>{const btn=document.createElement("button");btn.className="option";btn.type="button";btn.dataset.option=key;btn.textContent=`${key}. ${value}`;$("options").appendChild(btn)});
+    }
+    function answerText(q,key){return `${key}. ${q.options[key]||""}`}
+    function coachTip(q,correct){if(q.coach_tip)return q.coach_tip;if(correct)return"继续保持：先找条件，再确认题目问的是哪个量。";return q.common_misconception?`常见错因：${q.common_misconception}`:"先找等量关系，再列式检验。"}
+    function chooseAnswer(selected){
+      const q=order[index],correct=selected===q.answer,selectedText=answerText(q,selected),correctText=answerText(q,q.answer);
+      if(correct)score++;
+      document.querySelectorAll(".option").forEach(btn=>{btn.disabled=true;if(btn.dataset.option===q.answer)btn.classList.add("correct");if(btn.dataset.option===selected&&!correct)btn.classList.add("wrong")});
+      answers.push({question_id:q.id,display_order:index+1,question_text:q.text,selected_answer:selected,selected_answer_text:selectedText,correct_answer:q.answer,correct_answer_text:correctText,is_correct:correct,knowledge_tag:q.knowledge||"",difficulty:q.difficulty||"",explanation:q.explanation||"",common_misconception:q.common_misconception||"",coach_tip:q.coach_tip||coachTip(q,correct)});
+      $("feedback").className="feedback "+(correct?"ok":"bad");
+      $("feedback").innerHTML=`<div class="feedbackTitle">${correct?"答对了。":"还差一点，先看清楚题目关系。"}</div><div class="fbLine"><span class="fbLabel">你的答案</span>${esc(selectedText)}</div><div class="fbLine"><span class="fbLabel ok">正确答案</span>${esc(correctText)}</div><div class="fbLine"><span class="fbLabel blue">解析</span>${esc(q.explanation||"")}</div><div class="fbLine"><span class="fbLabel blue">提醒</span>${esc(coachTip(q,correct))}</div>`;
+      $("nextBtn").disabled=false;$("barFill").style.width=`${(index+1)/order.length*100}%`;$("scoreText").textContent=`答对 ${score} 题`;
+    }
+    $("options").addEventListener("click",e=>{const btn=e.target.closest(".option");if(!btn||btn.disabled)return;chooseAnswer(btn.dataset.option)});
+    $("nextBtn").addEventListener("click",()=>{if(index<order.length-1){index++;renderQuestion()}else{renderFinish()}});
+    function formatDateTime(ms){const d=new Date(ms);const pad=n=>String(n).padStart(2,"0");return`${d.getFullYear()}/${pad(d.getMonth()+1)}/${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`}
+    function formatDuration(sec){sec=Math.max(0,Math.round(Number(sec)||0));const m=Math.floor(sec/60),s=sec%60;return m>0?`${m}分${s}秒`:`${s}秒`}
+    function buildWrongAnalysisHtml(wrong){
+      if(!wrong.length)return"<p>本次没有错题，保持这个节奏。</p>";
+      return wrong.map(a=>`<div class="wrongItem"><b>第${a.display_order}题｜${esc(a.knowledge_tag||"知识点")}</b><span class="mini">题目：${esc(a.question_text)}</span><span class="mini">你的答案：${esc(a.selected_answer_text)}</span><span class="mini">正确答案：${esc(a.correct_answer_text)}</span><span class="mini">解析：${esc(a.explanation||"")}</span><span class="mini">怎么改：${esc(a.common_misconception||a.coach_tip||"回看本题知识点，再做一题同类题。")}</span></div>`).join("");
+    }
+    function buildOverallAnalysisHtml(weak,wrong,scoreValue){
+      const weakText=weak.length?weak.join("、"):"暂无明显薄弱点";
+      if(!wrong.length)return`<div class="adviceBlock"><div class="miniTitle c2">目前表现</div>本次掌握稳定，基础题和应用题都能处理。</div><div class="adviceBlock"><div class="miniTitle c3">下一步练习</div>可以继续挑战中等题或变式题。</div>`;
+      return`<div class="adviceBlock"><div class="miniTitle c2">目前表现</div>${scoreValue>=80?"整体基础较稳，主要需要修正少数易错点。":"基础计算可以继续巩固，文字题和情境题需要慢一点读题。"}</div><div class="adviceBlock"><div class="miniTitle c5">主要卡点</div>${esc(weakText)}</div><div class="adviceBlock"><div class="miniTitle c3">下一步练习</div>先复习这些知识点，再做3至5题同类基础题。每题都要代回检查一次。</div>`;
+    }
+    function buildWarm(scoreValue){
+      if(scoreValue>=80)return`<div class="miniTitle c1">给你的肯定</div>你这次完成得很稳定，说明基础方法已经开始成形。继续保持检查习惯，会更稳。`;
+      if(scoreValue>=50)return`<div class="miniTitle c1">给你的肯定</div>你已经完成整份练习，这很好。现在重点不是快，而是把每个条件读准。`;
+      return`<div class="miniTitle c1">给你的肯定</div>愿意完成练习就是进步的开始。先把错题看懂，再做同类题，分数会慢慢上来。`;
+    }
+    function renderFinish(){
+      const total=order.length,scoreValue=Math.round(score/total*100),wrong=answers.filter(a=>!a.is_correct),weak=[...new Set(wrong.map(a=>a.knowledge_tag).filter(Boolean))],completedAtMs=Date.now(),timeUsed=Math.max(1,Math.round((completedAtMs-startTime)/1000)),avgTime=total?Math.round(timeUsed/total):0,startedAtDisplay=formatDateTime(startTime),completedAtDisplay=formatDateTime(completedAtMs);
+      $("finalScore").textContent=score+"/"+total;$("finalRate").textContent=scoreValue+"%";$("finalWrong").textContent=wrong.length+"题";$("submitState").textContent="送达中…";
+      $("infoSchool").textContent=META.school_name;$("infoTeacher").textContent=META.teacher_name;$("infoClass").textContent=$("className").value.trim();$("infoStudent").textContent=$("studentName").value.trim();$("infoSeat").textContent=$("seatNo").value.trim()||"未填写";$("infoChapter").textContent=META.chapter_name;
+      $("startedAtDisplay").textContent=startedAtDisplay;$("completedAtDisplay").textContent=completedAtDisplay;$("timeUsedDisplay").textContent=formatDuration(timeUsed);$("avgTimeDisplay").textContent=formatDuration(avgTime)+"/题";
+      $("wrongAnalysis").innerHTML=buildWrongAnalysisHtml(wrong);$("overallAnalysis").innerHTML=buildOverallAnalysisHtml(weak,wrong,scoreValue);$("warmEncouragement").innerHTML=buildWarm(scoreValue);$("submitNotice").innerHTML="<div>提交状态：送达中…</div>";
+      show("finish");submitPayload(scoreValue,total,timeUsed,wrong,weak,startedAtDisplay,completedAtDisplay,completedAtMs,avgTime);
+    }
+    function submitPayload(scoreValue,total,timeUsed,wrong,weak,startedAtDisplay,completedAtDisplay,completedAtMs,avgTime){
+      const accuracyValue=scoreValue;
+      const payload={
+        action:"submit_response",
+        school_id:META.school_id,
+        school_name:META.school_name,
+        teacher_id:META.teacher_id,
+        teacher_name:META.teacher_name,
+        academic_year:META.academic_year,
+        semester:META.semester,
+        class_id:META.class_id,
+        class_name:$("className").value.trim(),
+        student_no:$("studentNo").value.trim(),
+        payload_student_no:$("studentNo").value.trim(),
+        student_name:$("studentName").value.trim(),
+        seat_no:$("seatNo").value.trim(),
+        practice_id:META.practice_id,
+        practice_name:META.practice_name,
+        practice_round:META.practice_round,
+        quiz_id:META.quiz_id,
+        quiz_name:META.quiz_name,
+        chapter_name:META.chapter_name,
+        score:scoreValue,
+        accuracy:accuracyValue,
+        total_questions:total,
+        payload_accuracy:accuracyValue,
+        payload_total_questions:total,
+        time_used:timeUsed,
+        avg_time_used:avgTime,
+        started_at:new Date(startTime).toISOString(),
+        started_at_display:startedAtDisplay,
+        completed_at:new Date(completedAtMs).toISOString(),
+        completed_at_display:completedAtDisplay,
+        answers_json:answers,
+        correct_json:answers.map(a=>({question_id:a.question_id,is_correct:a.is_correct})),
+        wrong_question_ids:wrong.map(a=>a.question_id),
+        weak_knowledge_tags:weak,
+        abnormal_flag:"none"
+      };
+      fetch(SUBMIT_URL,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(payload)}).then(()=>{submitted=true;$("submitState").textContent="已送达";$("submitNotice").innerHTML="<div>✅ 作答资料已成功发送给老师。</div><div>老师将依据您的作答情况进行分析，请等待老师后续讲解与反馈。</div><div class='small'>若老师尚未看到数据，请保留本页截图。</div>"}).catch(()=>{$("submitState").textContent="提交失败";$("submitNotice").innerHTML="<div>提交状态：提交失败。</div><div>请保留本页截图给老师核对。</div>"})
+    }
+  </script>
+</body>
+</html>
