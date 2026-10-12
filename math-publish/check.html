@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="zh-Hans"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>初中数学发布接口｜只读检查</title>
+<style>body{font:18px/1.7 system-ui,"Microsoft YaHei",sans-serif;max-width:720px;margin:2rem auto;padding:0 1rem}button{padding:12px 20px;font-size:1rem}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#f4f4f4;padding:1rem;border-radius:8px}small{color:#555}</style></head>
+<body><h1>初中数学发布接口｜只读检查</h1><p>检查现有初中数学 Apps Script 是否允许浏览器读取响应。此页面<strong>不会发布试卷、提交作答或修改数据库</strong>。</p>
+<button id="check">执行只读连通检查</button><pre id="result">尚未检查</pre><small>提示：网络响应可读不代表发布接口已通过验收；跨域限制、后端业务错误或登录页面均不能算通过。</small>
+<script>
+const endpoint='https://script.google.com/macros/s/AKfycbw8myNrNJoCF7Fk3au3mexUsZrChBqUox2C6jELNEJluYqCKssY27it8rNfzB2zyoMN/exec';
+document.getElementById('check').addEventListener('click',async()=>{
+ const el=document.getElementById('result');el.textContent='正在进行 GET 只读请求…';
+ try{const controller=new AbortController();const timer=setTimeout(()=>controller.abort(),12000);
+ let response;try{response=await fetch(endpoint,{method:'GET',redirect:'follow',cache:'no-store',signal:controller.signal});}finally{clearTimeout(timer)}
+ const body=(await response.text()).slice(0,1000);
+ el.textContent='HTTP '+response.status+'\n响应类型：'+response.headers.get('content-type')+'\n响应节选：\n'+body+'\n\n注意：这不是试卷发布或学生提交验收。';
+ }catch(e){el.textContent='浏览器无法读取接口响应：'+String(e)+'\n可能是跨域限制、网络错误或超时；不能据此断言后端已停用。';}
+});
+</script></body></html>
