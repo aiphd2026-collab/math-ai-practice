@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="zh-Hans"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>初中数学线上练习｜蓝志东博士</title>
+<style>body{font:18px/1.7 system-ui,"Microsoft YaHei",sans-serif;max-width:720px;margin:3rem auto;padding:0 20px}a{display:inline-block;padding:12px 18px;background:#17406f;color:white;border-radius:8px;text-decoration:none}#msg{margin:1rem 0}</style></head><body><h1>初中数学线上练习</h1><p>蓝志东博士</p><div id="msg">正在检查试卷链接…</div><p><a id="go" hidden rel="noopener noreferrer">进入学生练习</a></p>
+<script>
+(function(){
+const p=new URLSearchParams(location.search),id=p.get('paperId'),rev=p.get('revision');
+const validId=typeof id==='string'&&/^JSM-[A-Za-z0-9-]{1,90}$/.test(id);
+const validRev=typeof rev==='string'&&/^[1-9][0-9]{0,5}$/.test(rev);
+const msg=document.getElementById('msg'),a=document.getElementById('go');
+if(!validId||!validRev){msg.textContent='缺少有效的 paperId 或 revision，请向老师索取完整链接。';return;}
+const dest=new URL('https://junior-high-math-practice.phdblue.chatgpt.site/');
+dest.searchParams.set('paperId',id);dest.searchParams.set('revision',rev);
+msg.textContent='试卷编号：'+id+'，版本：'+rev+'。请点击下方按钮进入学生练习。';
+a.href=dest.href;a.hidden=false;
+})();
+</script></body></html>
